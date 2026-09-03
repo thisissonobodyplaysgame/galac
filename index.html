@@ -772,7 +772,7 @@
 
         <div id="gameBar" style="display: none;">
             <button class="btn btn-ghost" onclick="showGallery(galleryType);"><i class="fas fa-arrow-left"></i> Back to Gallery</button>
-            <button class="btn btn-ghost" onclick="triggerFullscreen();"><i class="fas fa-expand"></i> Fullscreen</button>
+            <button class="btn btn-ghost" onclick="triggerGameFullscreen();"><i class="fas fa-expand"></i> Fullscreen</button>
         </div>
     </main>
 
@@ -1265,6 +1265,14 @@
             const docEl = document.documentElement;
             const req = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
             if (req) req.call(docEl);
+        }
+
+        // Fullscreen just the game/app iframe that's currently open.
+        function triggerGameFullscreen() {
+            const iframe = document.getElementById('Game');
+            if (!iframe) return;
+            const req = iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen || iframe.msRequestFullscreen;
+            if (req) req.call(iframe);
         }
 
         function appendScript(url, callback) {
