@@ -1158,6 +1158,13 @@
                 // Center the tab cloaking dropdown and give it a heading
                 const cloak = doc.getElementById('cloakDropdown');
                 if (cloak) {
+                    // Make the default "None"/no-cloak option be Galactic Games w/ galaxy icon
+                    var cloakOpts = cloak.querySelectorAll('option');
+                    if (cloakOpts.length > 1) {
+                        cloakOpts[1].title = 'Galactic Games';
+                        cloakOpts[1].setAttribute('data-src', 'https://www.pngitem.com/pimgs/m/596-5960373_galaxy-pink-violet-blue-white-star-stars-circle.png');
+                        cloakOpts[1].textContent = 'None (Galactic Games)';
+                    }
                     const cloakWrap = document.createElement('div');
                     cloakWrap.style.cssText =
                         'text-align:center; margin:34px auto 10px; width:100%; display:block;';
@@ -1312,7 +1319,7 @@
 
         // Keep the legacy customization scripts happy
         if (localStorage.getItem('faviconSrc') == null) {
-            localStorage.setItem('faviconSrc', 'https://gitlab.com/arcade_v/arcade_v_images/-/raw/main/favicon/logo.png');
+            localStorage.setItem('faviconSrc', 'https://www.pngitem.com/pimgs/m/596-5960373_galaxy-pink-violet-blue-white-star-stars-circle.png');
         }
         if (localStorage.getItem('pageTitle') == null) {
             localStorage.setItem('pageTitle', 'Galactic Games');
