@@ -751,7 +751,10 @@
                 <a aria-label="Apps" data-page="apps" onclick="showGallery('apps');">
                     <i class="fas fa-mobile-alt"></i><span>Apps</span>
                 </a>
-                <a aria-label="Proxy" href="https://learningaboutwoodworkings.b-cdn.net/scramjet" target="_blank" rel="noopener">
+                <a aria-label="Movies" href="https://learningaboutespanolinschool.b-cdn.net/scramjet/https%3A%2F%2Fthisissonobodyplaysgame.github.io%2Ffluxsun%2F" target="_blank" rel="noopener">
+                    <i class="fas fa-film"></i><span>Movies</span>
+                </a>
+                <a aria-label="Proxy" href="https://learningaboutbandclassesinschool.b-cdn.net/slate" target="_blank" rel="noopener">
                     <i class="fas fa-ghost"></i><span>Proxy</span>
                 </a>
                 <a aria-label="Settings" data-page="settings" onclick="loadSettings();">
@@ -1088,8 +1091,18 @@
         }
 
         function playGame(btn) {
-            const url = btn.getAttribute('data-url');
+            let url = btn.getAttribute('data-url');
             if (!url) return;
+            // raw.githubusercontent.com blocks iframes (X-Frame-Options: deny) and
+            // Unity/HTML5 games fail when blob-loaded. rawcdn.githack mirrors the
+            // same GitHub file but allows embedding, so serve it as a direct iframe
+            // where the game runs in its native origin (fixes black screens).
+            const RAWGH = 'https://raw.githubusercontent.com/';
+            if (url.indexOf(RAWGH) === 0 && /\.html?$/i.test(url.split(/[?#]/)[0])) {
+                url = 'https://rawcdn.githack.com/' + url.slice(RAWGH.length);
+                setIframe(url);
+                return;
+            }
             if (btn.getAttribute('data-direct')) {
                 setIframe(url);
             } else {
@@ -1101,7 +1114,24 @@
         // so we fetch the HTML and load it via a blob URL.
         function launchGame(url) {
             loadPageContent(url, function(content) {
-                var blob = new Blob([content], {type: 'text/html'});
+                var html = content;
+                // Inject a <base> tag so relative asset paths resolve against the
+                // real game URL. Games without their own <base> (many Unity/HTML5
+                // games) otherwise lose relative paths when blob-loaded -> black screen.
+                if (!/<base\s/i.test(html)) {
+                    var baseDir = url.split('#')[0].split('?')[0];
+                    if (!/\/$/.test(baseDir)) {
+                        var slash = baseDir.lastIndexOf('/');
+                        if (slash > 7) baseDir = baseDir.slice(0, slash + 1);
+                    }
+                    var baseTag = '<base href="' + baseDir + '">';
+                    if (/<head[^>]*>/i.test(html)) {
+                        html = html.replace(/<head[^>]*>/i, function(match) { return match + baseTag; });
+                    } else {
+                        html = baseTag + html;
+                    }
+                }
+                var blob = new Blob([html], {type: 'text/html'});
                 var iframe = document.getElementById('Game');
                 iframe.src = URL.createObjectURL(blob);
                 document.getElementById('content-container').style.display = 'none';
