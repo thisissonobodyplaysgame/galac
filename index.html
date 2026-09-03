@@ -1284,6 +1284,32 @@
             document.body.appendChild(script);
         }
 
+        // ===== Tab Cloaking =====
+        // Set the browser tab title (persists).
+        function changeTitle(title) {
+            document.title = title;
+            localStorage.setItem('pageTitle', title);
+        }
+
+        // Set the browser favicon (persists).
+        function changeFavicon(src) {
+            let link = document.getElementById('dynamic-favicon');
+            if (!link) {
+                link = document.createElement('link');
+                link.id = 'dynamic-favicon';
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = src + '?v=' + new Date().getTime();
+            localStorage.setItem('faviconSrc', src);
+        }
+
+        // Cloak the tab: change title + favicon together.
+        function cloakpage(title, src) {
+            changeTitle(title);
+            changeFavicon(src);
+        }
+
         // Keep the legacy customization scripts happy
         if (localStorage.getItem('faviconSrc') == null) {
             localStorage.setItem('faviconSrc', 'https://gitlab.com/arcade_v/arcade_v_images/-/raw/main/favicon/logo.png');
@@ -1291,6 +1317,11 @@
         if (localStorage.getItem('pageTitle') == null) {
             localStorage.setItem('pageTitle', 'Galactic Games');
         }
+
+        // Apply any saved tab cloak on load
+        changeTitle(localStorage.getItem('pageTitle') || 'Galactic Games');
+        const savedFav = localStorage.getItem('faviconSrc');
+        if (savedFav) changeFavicon(savedFav);
 
         // Apply any saved background theme on load
         applyTheme(localStorage.getItem('bgTheme') || 'deep');
