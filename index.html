@@ -1174,7 +1174,11 @@
             // where the game runs in its native origin (fixes black screens).
             const RAWGH = 'https://raw.githubusercontent.com/';
             if (url.indexOf(RAWGH) === 0 && /\.html?$/i.test(url.split(/[?#]/)[0])) {
-                url = 'https://rawcdn.githack.com/' + url.slice(RAWGH.length);
+                // Serve gn (gn-math/html) games from our own GitHub Pages mirror
+                // instead of rawcdn.githack, which Securly blocks. raw.githubusercontent.com/gn-math/html/main/X
+                // becomes https://thisissonobodyplaysgame.github.io/ugs/GN-Files/X
+                url = 'https://thisissonobodyplaysgame.github.io/ugs/GN-Files/' +
+                    url.slice(RAWGH.length).split('/').slice(3).join('/');
                 setIframe(url);
                 return;
             }
