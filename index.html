@@ -1104,16 +1104,11 @@
                 setIframe(url);
                 return;
             }
-            // UGS games on jsDelivr are served as text/plain, so direct-iframing
-            // them shows raw source. Blob-loading instead gives them an opaque
-            // blob: origin, which makes their synchronous XHR asset checks and
-            // window.location-based path resolution fail -> games sit on the
-            // loading bar forever (e.g. Solar Smash). Mirror the same file via
-            // rawcdn.githack (serves text/html with no X-Frame-Options) so the
-            // game runs in a direct iframe at a real origin and loads fully.
+            // UGS games: jsDelivr serves these as text/plain (cannot direct-iframe),
+            // so serve them as direct iframes from our GitHub Pages mirror instead.
             const UGSJSD = 'https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/';
             if (url.indexOf(UGSJSD) === 0) {
-                url = 'https://rawcdn.githack.com/bubbls/ugs-singlefile/main/UGS-Files/' + url.slice(UGSJSD.length);
+                url = 'https://thisissonobodyplaysgame.github.io/ugs/UGS-Files/' + url.slice(UGSJSD.length);
                 setIframe(url);
                 return;
             }
