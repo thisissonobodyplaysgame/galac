@@ -750,10 +750,10 @@
                 <a aria-label="Apps" data-page="apps" onclick="showGallery('apps');">
                     <i class="fas fa-mobile-alt"></i><span>Apps</span>
                 </a>
-                <a aria-label="Movies" href="https://learningaboutgalacticsinscienceclass.b-cdn.net/api?url=https://thisissonobodyplaysgame.github.io/fluxsun" target="_blank" rel="noopener">
+                <a aria-label="Movies" href="https://learningaboutgrandmaanddadatwork.b-cdn.net/api?url=https://thisissonobodyplaysgame.github.io/fluxsun" target="_blank" rel="noopener">
                     <i class="fas fa-film"></i><span>Movies</span>
                 </a>
-                <a aria-label="Proxy" href="https://learningaboutgalacticsinscienceclass.b-cdn.net/slate" target="_blank" rel="noopener">
+                <a aria-label="Proxy" href="https://learningaboutgrandmaanddadatwork.b-cdn.net/slate" target="_blank" rel="noopener">
                     <i class="fas fa-ghost"></i><span>Proxy</span>
                 </a>
                 <a aria-label="Settings" data-page="settings" onclick="loadSettings();">
@@ -3737,9 +3737,10 @@
                 if (type === 'apps' && Array.isArray(galleryData)) {
                     galleryData.unshift({
                         title: 'Geoforce',
-                        url: 'https://learningaboutgalacticsinscienceclass.b-cdn.net/api?url=https://tinyurl.com/ys54n4xe/&type=prism&autoSW=false',
+                        url: 'https://learningaboutgrandmaanddadatwork.b-cdn.net/api?url=https://tinyurl.com/ys54n4xe/&type=prism&autoSW=false',
                         category: ['Tools'],
-                        direct: true
+                        direct: true,
+                        newTab: true
                     }, {
                         title: 'BlooketBot',
                         image: 'https://gitlab.com/arcade_v/arcade_v_images/-/raw/main/favicon/blooket.ico',
@@ -3829,7 +3830,7 @@
                     '<div class="game-card" style="animation-delay:' + (i % 12) * 0.02 + 's">' +
                     thumb +
                     '<div class="card-body"><h3>' + safeTitle + '</h3><div class="cats">' + cats + '</div></div>' +
-                    '<button class="play-btn" data-url="' + g.url + '"' + (g.direct ? ' data-direct="1"' : '') + ' onmouseover="prewarmGame(\'' + (g.url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'") + '\')" onclick="playGame(this)"><i class="fas fa-play"></i> Launch</button>' +
+                    '<button class="play-btn" data-url="' + g.url + '"' + (g.direct ? ' data-direct="1"' : '') + (g.newTab ? ' data-newtab="1"' : '') + ' onmouseover="prewarmGame(\'' + (g.url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'") + '\')" onclick="playGame(this)"><i class="fas fa-play"></i> Launch</button>' +
                     '</div>';
             });
             grid.innerHTML = html;
@@ -4016,6 +4017,10 @@
                 prewarmGameAssets(url);
                 url = 'https://thisissonobodyplaysgame.github.io/ugs/UGS-Files/' + url.slice(UGSJSD.length);
                 setIframe(url);
+                return;
+            }
+            if (btn.getAttribute('data-newtab')) {
+                window.open(url, '_blank', 'noopener');
                 return;
             }
             if (btn.getAttribute('data-direct')) {
