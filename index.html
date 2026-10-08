@@ -508,7 +508,7 @@
             <a aria-label="Proxy" href="https://learningaboutnoahandjacobatwork.b-cdn.net/slate" target="_blank" rel="noopener">
                 <i class="fas fa-ghost"></i><span>Proxy</span>
             </a>
-            <a aria-label="A.I." data-page="ai" onclick="launchAI();">
+            <a aria-label="A.I." href="https://gemini.google.com/app" target="_blank" rel="noopener">
                 <i class="fas fa-brain"></i><span>A.I.</span>
             </a>
             <a aria-label="Settings" data-page="settings" onclick="loadSettings();">
@@ -4108,16 +4108,6 @@
             frame.style.display = 'block';
             document.getElementById('gameBar').style.display = 'flex';
             window.scrollTo(0, 0);
-        }
-
-        // Open Gemini (web) in the in-site player iframe
-        function launchAI() {
-            galleryType = 'home';
-            document.body.classList.add('movie-mode');
-            const url = 'https://gemini.google.com/app';
-            prewarmGame(url);
-            setIframe(url);
-            setActive('ai');
         }
 
         // Open the movie feed in the in-site player iframe
