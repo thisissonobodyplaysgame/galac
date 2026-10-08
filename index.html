@@ -464,6 +464,221 @@
             .hero { padding: 60px 18px 40px; }
             .hero h1 { white-space: normal; }
         }
+
+        /* ===== MECHANIC // LAYOUT UPGRADE ===== */
+        /* animated HUD grid + depth vignette behind everything */
+        body::before {
+            content: ''; position: fixed; inset: -2px; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 46px 46px, 46px 46px;
+            -webkit-mask-image: radial-gradient(ellipse 82% 72% at 50% 26%, #000 28%, transparent 78%);
+            mask-image: radial-gradient(ellipse 82% 72% at 50% 26%, #000 28%, transparent 78%);
+            animation: gridDrift 30s linear infinite;
+        }
+        body::after {
+            content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse 58% 44% at 50% -6%, rgba(255, 255, 255, 0.09), transparent 70%),
+                radial-gradient(ellipse 110% 80% at 50% 122%, rgba(0, 0, 0, 0.62), transparent 62%);
+        }
+        @keyframes gridDrift { from { background-position: 0 0, 0 0; } to { background-position: 46px 46px, 46px 46px; } }
+
+        /* header: live scan sweep + glass blur */
+        header { background: rgba(8, 8, 11, 0.72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+        header::before {
+            content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+            background-size: 34% 100%; background-repeat: no-repeat;
+            animation: scanX 4.6s ease-in-out infinite;
+        }
+        @keyframes scanX { 0% { background-position: -34% 0; } 100% { background-position: 134% 0; } }
+
+        .brand-text { display: flex; flex-direction: column; line-height: 1; }
+        .brand-sub { font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.3em; color: var(--faint); margin-top: 5px; }
+        .brand-icon { position: relative; }
+        .brand-icon::after { content: ''; position: absolute; inset: -3px; box-shadow: 0 0 22px rgba(255, 255, 255, 0.45); border: 1px solid rgba(255, 255, 255, 0.5); opacity: 0; animation: brandPulse 3.4s ease-in-out infinite; }
+        @keyframes brandPulse { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        /* ticker strip */
+        .ticker {
+            position: relative; overflow: hidden; margin: 0 auto 30px; max-width: 880px;
+            border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.02);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        }
+        .ticker-track {
+            display: flex; gap: 44px; width: max-content; white-space: nowrap; padding: 11px 0;
+            font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+            animation: tickMove 28s linear infinite;
+        }
+        .ticker:hover .ticker-track { animation-play-state: paused; }
+        .ticker-track i { color: #fff; margin-right: 9px; }
+        @keyframes tickMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* hero upgrades */
+        .hero { isolation: isolate; transition: box-shadow 0.35s ease, border-color 0.35s ease; }
+        .hero:hover { border-color: #fff; box-shadow: 8px 8px 0 var(--hard), 0 0 70px rgba(255, 255, 255, 0.1); }
+        .brk { position: absolute; width: 18px; height: 18px; border: 2px solid #fff; opacity: 0.85; z-index: 2; }
+        .brk.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+        .brk.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+        .brk.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+        .brk.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+        .hero h1 {
+            background: linear-gradient(100deg, #fff 0%, #8f8f9c 38%, #ffffff 52%, #8f8f9c 66%, #fff 100%);
+            background-size: 220% 100%;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+            animation: h1Sheen 7s linear infinite;
+        }
+        @keyframes h1Sheen { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+        .hero h1::after { background: linear-gradient(90deg, transparent, #fff, transparent); box-shadow: 0 0 18px rgba(255, 255, 255, 0.6); }
+        .hero-stats { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; margin-top: 26px; position: relative; z-index: 2; }
+        .hero-stats > div { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .hero-stats b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.04em; color: #fff; text-shadow: 0 0 18px rgba(255, 255, 255, 0.35); }
+        .hero-stats span { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.22em; color: var(--faint); text-transform: uppercase; }
+
+        /* section cards */
+        .section-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; overflow: hidden; }
+        .section-card::after { content: ''; position: absolute; top: 0; right: 0; width: 68px; height: 68px; background: linear-gradient(225deg, rgba(255, 255, 255, 0.13), transparent 62%); pointer-events: none; }
+        .section-card:hover { transform: translateY(-3px); border-color: var(--line-strong); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 22px 60px rgba(0, 0, 0, 0.5); }
+        .section-card h2::after { content: ''; flex: 1; height: 1px; margin-left: 14px; background: linear-gradient(90deg, var(--line-strong), transparent); }
+
+        /* game cards: light sheen */
+        .game-card::before {
+            content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0;
+            background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.16) 50%, transparent 68%);
+            background-size: 250% 100%;
+        }
+        .game-card:hover::before { opacity: 1; animation: cardSheen 1.1s ease; }
+        @keyframes cardSheen { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+        .game-card .play-btn:hover { box-shadow: 0 5px 0 var(--hard), 0 0 26px rgba(255, 255, 255, 0.35); }
+        .btn-primary:hover { box-shadow: 0 6px 0 var(--hard), 0 0 28px rgba(255, 255, 255, 0.35); }
+
+        /* gallery heading glow */
+        .gallery-head h1 { text-shadow: 0 0 34px rgba(255, 255, 255, 0.18); }
+
+        @media (max-width: 720px) {
+            .hero-stats { gap: 20px; margin-top: 20px; }
+            .section-card h2::after { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body::before, header::before, .brand-icon::after, .hero h1, .ticker-track { animation: none; }
+            .game-card:hover::before { animation: none; }
+        }
+
+        /* ===== Owner console ===== */
+        .owner-wrap { animation: fadeSlideUp 0.5s ease both; }
+        .owner-banner {
+            position: relative; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            border: 1px solid var(--line-strong); border-left: 3px solid #fff;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+            padding: 20px 24px; margin-bottom: 26px; overflow: hidden;
+        }
+        .owner-banner .lock { width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #fff; color: #0a0a0d; font-size: 18px; box-shadow: 3px 3px 0 var(--hard); }
+        .owner-banner h1 { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .owner-banner p { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; color: var(--muted); margin-top: 5px; }
+        .owner-banner .grow { flex: 1; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 26px; }
+        .stat-tile { position: relative; border: 1px solid var(--line); background: var(--panel); padding: 16px 16px 14px; overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease; }
+        .stat-tile:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+        .stat-tile::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, #fff, transparent); opacity: 0.6; }
+        .stat-tile .v { font-family: var(--font-display); font-size: 1.45rem; font-weight: 700; color: #fff; line-height: 1.15; word-break: break-word; }
+        .stat-tile .k { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 7px; }
+        .stat-tile .i { position: absolute; top: 12px; right: 12px; color: var(--faint); font-size: 0.8rem; }
+        .kv { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.76rem; }
+        .kv td { padding: 8px 10px; border-bottom: 1px dashed var(--line); vertical-align: top; }
+        .kv td:first-child { color: var(--faint); letter-spacing: 0.08em; text-transform: uppercase; width: 42%; }
+        .kv td:last-child { color: #fff; word-break: break-word; }
+        .tool-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+        .tool-btn { padding: 9px 15px; border: 1px solid var(--line-strong); background: var(--panel2); color: #fff; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.18s ease; }
+        .tool-btn:hover { border-color: #fff; transform: translateY(-2px); box-shadow: 0 4px 0 var(--hard); }
+        .tool-btn.danger:hover { background: #fff; color: #0a0a0d; }
+        .log-scroll { max-height: 300px; overflow: auto; border: 1px solid var(--line); }
+        .log-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.72rem; }
+        .log-table th { position: sticky; top: 0; text-align: left; background: var(--panel2); color: var(--faint); font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; padding: 9px 10px; border-bottom: 1px solid var(--line-strong); }
+        .log-table td { padding: 8px 10px; border-bottom: 1px dashed var(--line); color: var(--muted); }
+        .log-table td:first-child { color: #fff; white-space: nowrap; }
+        .codebox { font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.55; background: #0a0a0d; border: 1px solid var(--line); padding: 14px; white-space: pre-wrap; word-break: break-word; color: var(--muted); max-height: 260px; overflow: auto; }
+        .codebox code, .section-card p code { font-family: var(--font-mono); color: #fff; background: rgba(255, 255, 255, 0.08); padding: 1px 5px; }
+
+        /* ===== Owner console: tab bar ===== */
+        .own-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+        .own-tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease; }
+        .own-tab:hover { color: #fff; border-color: var(--line-strong); transform: translateY(-2px); }
+        .own-tab.active { background: #fff; color: #0a0a0d; border-color: #fff; box-shadow: 3px 3px 0 var(--hard); }
+
+        /* ===== Owner console: switches ===== */
+        .fx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+        .switch { display: flex; align-items: center; gap: 11px; border: 1px solid var(--line); background: var(--panel); padding: 12px 14px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease; user-select: none; }
+        .switch:hover { border-color: var(--line-strong); color: #fff; transform: translateY(-2px); }
+        .switch .dot { position: relative; width: 34px; height: 18px; flex-shrink: 0; border: 1px solid var(--line-strong); background: var(--panel2); transition: background 0.18s ease, border-color 0.18s ease; }
+        .switch .dot::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: var(--faint); transition: transform 0.18s ease, background 0.18s ease; }
+        .switch.on { border-color: #fff; color: #fff; }
+        .switch.on .dot { background: rgba(255, 255, 255, 0.14); border-color: #fff; }
+        .switch.on .dot::after { transform: translateX(16px); background: #fff; }
+
+        /* ===== Status pills ===== */
+        .ok { color: #7dffb0; }
+        .no { color: #ff8b8b; }
+
+        /* ===== FX overlays ===== */
+        #mechScanlines, #mechVignette, #mechCrt { position: fixed; inset: 0; pointer-events: none; z-index: 900; display: none; }
+        #mechScanlines { z-index: 899; background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0 1px, rgba(0, 0, 0, 0.28) 1px 2px, transparent 2px 4px); }
+        body.fx-scanlines #mechScanlines { display: block; }
+
+        #mechVignette { z-index: 899; background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.85) 100%); }
+        body.fx-vignette #mechVignette { display: block; }
+
+        #mechCrt { z-index: 901; background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 2px); box-shadow: inset 0 0 140px rgba(130, 255, 185, 0.07); animation: crtFlicker 0.1s infinite; }
+        #mechCrt::after { content: ''; position: absolute; left: 0; right: 0; height: 30%; background: linear-gradient(transparent, rgba(255, 255, 255, 0.12), transparent); animation: crtRoll 7s linear infinite; }
+        body.fx-crt #mechCrt { display: block; }
+        @keyframes crtFlicker { 0% { opacity: 0.5; } 50% { opacity: 0.9; } 100% { opacity: 0.62; } }
+        @keyframes crtRoll { from { top: -30%; } to { top: 110%; } }
+
+        #mechGrain { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 899; display: none; opacity: 0.16; background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='140'%20height='140'%20filter='url(%23n)'%20opacity='0.6'/%3E%3C/svg%3E"); background-size: 120px 120px; animation: grainShift 0.6s steps(4) infinite; }
+        body.fx-grain #mechGrain { display: block; }
+        @keyframes grainShift { 0% { transform: translate(0, 0); } 25% { transform: translate(-4%, 3%); } 50% { transform: translate(3%, -2%); } 75% { transform: translate(-2%, -4%); } 100% { transform: translate(0, 0); } }
+
+        #mechMatrix { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 850; pointer-events: none; opacity: 0.32; }
+
+        /* filters applied per top-level layer so fixed elements keep working */
+        body.fx-invert #webBkg, body.fx-invert header, body.fx-invert .drawer,
+        body.fx-invert #content-container, body.fx-invert #Game, body.fx-invert #gameBar { filter: invert(1) hue-rotate(180deg); }
+        body.fx-ghost #content-container { opacity: 0.8; filter: blur(0.4px) saturate(0.5); }
+        body.fx-bloom #content-container { filter: brightness(1.12) saturate(1.06); }
+        body.fx-bloom .section-card, body.fx-bloom .game-card, body.fx-bloom .stat-tile, body.fx-bloom .tool-btn { box-shadow: 0 0 24px rgba(255, 255, 255, 0.09); }
+        body.fx-hue #webBkg, body.fx-hue #content-container { animation: hueCycle 12s linear infinite; }
+        @keyframes hueCycle { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+        body.fx-chroma #content-container { text-shadow: 2px 0 rgba(255, 0, 90, 0.5), -2px 0 rgba(0, 190, 255, 0.5); }
+        body.fx-chroma h1, body.fx-chroma h2, body.fx-chroma .brand-name, body.fx-chroma .gallery-head h1 { text-shadow: 3px 0 rgba(255, 0, 90, 0.6), -3px 0 rgba(0, 190, 255, 0.6); }
+        body.fx-glitch #content-container { animation: glitchShift 5s steps(1) infinite; }
+        @keyframes glitchShift {
+            0%, 90%, 100% { transform: translate(0, 0); filter: none; }
+            91% { transform: translate(-3px, 1px); }
+            92% { transform: translate(3px, -2px); filter: hue-rotate(25deg); }
+            93% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -1px); }
+            95% { transform: translate(0, 0); }
+        }
+        body.fx-turbo *, body.fx-turbo *::before, body.fx-turbo *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition-duration: 0s !important; }
+
+        /* ===== Extras tab extras ===== */
+        .fx-count { display: inline-block; margin-left: 8px; padding: 2px 10px; border: 1px solid var(--line-strong); border-radius: 999px; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; color: #fff; vertical-align: middle; }
+        .fx-note { color: var(--muted); margin-bottom: 16px; }
+
+        /* ===== Confetti ===== */
+        .mech-confetti { position: fixed; top: -14px; width: 9px; height: 14px; z-index: 1000; pointer-events: none; animation-name: confFall; animation-timing-function: linear; animation-fill-mode: forwards; }
+        @keyframes confFall {
+            0% { transform: translateY(-14px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(102vh) rotate(720deg); opacity: 0.9; }
+        }
+
+        @media (max-width: 720px) { .own-tab { flex: 1 1 auto; justify-content: center; } }
+        @media (prefers-reduced-motion: reduce) { .mech-confetti, #mechMatrix, #mechGrain, #mechCrt { display: none !important; } }
     </style>
 </head>
 <body style="margin: 0;">
@@ -527,7 +742,10 @@
         <div class="header-inner">
             <a class="brand" href="#" onclick="showHome(); return false;">
                 <div class="brand-icon"><i class="fas fa-wrench"></i></div>
-                <div class="brand-name">MECHANIC</div>
+                <div class="brand-text">
+                    <div class="brand-name">MECHANIC</div>
+                    <div class="brand-sub">OPS // CONSOLE</div>
+                </div>
             </a>
             <div class="hud"><span class="hud-dot"></span><span>SYS <b id="headerClock">--:--:--</b></span><span>&middot;</span><span>2,817 TITLES</span></div>
         </div>
@@ -710,9 +928,31 @@
 
         // ===== Built-in Homepage =====
         const HOMEPAGE_HTML = `
+            <div class="ticker" aria-hidden="true">
+                <div class="ticker-track">
+                    <span><i class="fas fa-bolt"></i>2,817 Titles</span>
+                    <span><i class="fas fa-gamepad"></i>Flash &middot; Unity &middot; HTML5</span>
+                    <span><i class="fas fa-wifi"></i>No Downloads</span>
+                    <span><i class="fas fa-shield-halved"></i>Embedded &amp; Sandboxed</span>
+                    <span><i class="fas fa-star"></i>New Drops Weekly</span>
+                    <span><i class="fas fa-bolt"></i>2,817 Titles</span>
+                    <span><i class="fas fa-gamepad"></i>Flash &middot; Unity &middot; HTML5</span>
+                    <span><i class="fas fa-wifi"></i>No Downloads</span>
+                    <span><i class="fas fa-shield-halved"></i>Embedded &amp; Sandboxed</span>
+                    <span><i class="fas fa-star"></i>New Drops Weekly</span>
+                </div>
+            </div>
+
             <div class="hero">
+                <span class="brk tl" aria-hidden="true"></span><span class="brk tr" aria-hidden="true"></span>
+                <span class="brk bl" aria-hidden="true"></span><span class="brk br" aria-hidden="true"></span>
                 <h1><span class="tw" id="typewriter"></span><span class="twc" aria-hidden="true"></span></h1>
                 <p class="tagline">MECHANIC — a growing collection of web games and apps, from classic favorites to hidden gems — all in one place.</p>
+                <div class="hero-stats">
+                    <div><b>2,817</b><span>Titles</span></div>
+                    <div><b>2 In 1</b><span>Games + Apps</span></div>
+                    <div><b>0 Sec</b><span>Install Time</span></div>
+                </div>
                 <div class="buttons">
                     <button class="btn btn-primary" onclick="showGallery('games');"><i class="fas fa-gamepad"></i> Browse Games</button>
                     <button class="btn btn-ghost" onclick="showGallery('apps');"><i class="fas fa-mobile-alt"></i> Explore Apps</button>
@@ -4222,6 +4462,527 @@
 
         // Apply any saved background theme on load
         applyTheme(localStorage.getItem('bgTheme') || 'deep');
+
+        // ===================== OWNER CONSOLE (secret: type P R E S T O N) =====================
+        // Paste a Google Apps Script /exec URL below to log + show visitors from ALL devices.
+        const OWNER_LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyNARC5GfOJ7COhYXRfWRU_G_OSla0JV-KYTDB1BNNhVz6kyA7thZJPw2rdbvaSZQJvtQ/exec';
+
+        function mechISO() { return new Date().toISOString(); }
+        function mechAge(iso) {
+            try {
+                var s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+                if (s < 60) return s + 's ago';
+                if (s < 3600) return Math.floor(s / 60) + 'm ago';
+                if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+                return Math.floor(s / 86400) + 'd ago';
+            } catch (e) { return '-'; }
+        }
+        function mechReadData() { try { return JSON.parse(localStorage.getItem('mech_data') || '{}') || {}; } catch (e) { return {}; } }
+        function mechWriteData(d) { try { localStorage.setItem('mech_data', JSON.stringify(d)); } catch (e) {} }
+
+        function mechRecordVisit() {
+            var d = mechReadData();
+            if (!d.firstSeen) d.firstSeen = mechISO();
+            d.lastSeen = mechISO();
+            d.visits = (d.visits || 0) + 1;
+            d.sessions = (d.sessions || 0) + 1;
+            if (!d.log) d.log = [];
+            d.log.unshift({ t: mechISO(), ref: document.referrer || 'direct', path: location.pathname + location.hash, res: screen.width + 'x' + screen.height });
+            d.log = d.log.slice(0, 200);
+            mechWriteData(d);
+            var start = Date.now();
+            window.addEventListener('pagehide', function () {
+                var x = mechReadData(); x.lastDur = Math.round((Date.now() - start) / 1000); mechWriteData(x);
+            });
+            mechPostVisit();
+        }
+        mechRecordVisit();
+
+        // capture JS errors for the Diagnostics tab
+        window._mechErrs = window._mechErrs || [];
+        window.addEventListener('error', function (e) { try { window._mechErrs.push({ t: mechISO(), msg: (e.message || 'error') + (e.filename ? ' @ ' + e.filename.split('/').pop() + ':' + e.lineno : '') }); } catch (x) {} });
+        window.addEventListener('unhandledrejection', function (e) { try { window._mechErrs.push({ t: mechISO(), msg: 'Promise: ' + ((e.reason && (e.reason.message || e.reason)) || 'unknown') }); } catch (x) {} });
+
+        function mechPostVisit() {
+            if (!OWNER_LOG_ENDPOINT) return;
+            try {
+                fetch(OWNER_LOG_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ t: mechISO(), ref: document.referrer || 'direct', path: location.pathname, screen: screen.width + 'x' + screen.height, tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || ''), lang: navigator.language || '', ua: navigator.userAgent }) });
+            } catch (e) {}
+        }
+
+        // count game plays (capture clicks on cards, no need to touch playGame)
+        document.addEventListener('click', function (e) {
+            var card = e.target && e.target.closest ? e.target.closest('.game-card') : null;
+            if (!card) return;
+            var h = card.querySelector('.card-body h3');
+            var title = h ? h.textContent.trim() : 'Unknown';
+            var d = mechReadData(); d.plays = d.plays || {}; d.plays[title] = (d.plays[title] || 0) + 1; mechWriteData(d);
+        });
+
+        function mechDetect() {
+            var ua = navigator.userAgent, os = 'Unknown', br = 'Unknown';
+            if (/Windows/i.test(ua)) os = 'Windows'; else if (/CrOS/i.test(ua)) os = 'ChromeOS'; else if (/Mac OS/i.test(ua)) os = 'macOS'; else if (/Android/i.test(ua)) os = 'Android'; else if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS'; else if (/Linux/i.test(ua)) os = 'Linux';
+            if (/Edg\//.test(ua)) br = 'Edge'; else if (/OPR\//.test(ua)) br = 'Opera'; else if (/Chrome\//.test(ua)) br = 'Chrome'; else if (/Firefox\//.test(ua)) br = 'Firefox'; else if (/Safari\//.test(ua)) br = 'Safari';
+            return { os: os, br: br, ua: ua };
+        }
+        function mechTiming() {
+            try {
+                var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+                if (n) return { ttfb: Math.round(n.responseStart) + ' ms', dom: Math.round(n.domContentLoadedEventEnd) + ' ms', load: (n.loadEventEnd ? Math.round(n.loadEventEnd) + ' ms' : '-'), transfer: (n.transferSize ? (n.transferSize / 1024).toFixed(1) + ' KB' : '-') };
+            } catch (e) {}
+            return { ttfb: '-', dom: '-', load: '-', transfer: '-' };
+        }
+        function mechStorageList() {
+            var out = [];
+            for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); var v = localStorage.getItem(k) || ''; out.push([k, (v.length / 1024).toFixed(2) + ' KB']); }
+            return out;
+        }
+        function statTile(k, v, icon) {
+            return '<div class="stat-tile"><i class="fas ' + icon + ' i"></i><div class="v">' + v + '</div><div class="k">' + k + '</div></div>';
+        }
+        function ownerKV(pairs) {
+            return '<table class="kv"><tbody>' + pairs.map(function (p) { return '<tr><td>' + p[0] + '</td><td>' + p[1] + '</td></tr>'; }).join('') + '</tbody></table>';
+        }
+        function mechGpu() {
+            var el = document.getElementById('ownerGpu'); if (!el) return;
+            try {
+                var gl = document.createElement('canvas').getContext('webgl');
+                if (!gl) { el.textContent = 'unavailable'; return; }
+                var ext = gl.getExtension('WEBGL_debug_renderer_info');
+                el.textContent = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : 'hidden by browser';
+            } catch (e) { el.textContent = 'error'; }
+        }
+        function mechBattery() {
+            var el = document.getElementById('ownerBatt'); if (!el || !navigator.getBattery) { if (el) el.textContent = 'n/a'; return; }
+            navigator.getBattery().then(function (b) { if (el) el.textContent = Math.round(b.level * 100) + '% ' + (b.charging ? '(charging)' : ''); }).catch(function () { if (el) el.textContent = 'n/a'; });
+        }
+        function mechPing() {
+            var el = document.getElementById('ownerPing'); if (el) el.textContent = '...';
+            var t0 = performance.now();
+            fetch('https://cdn.jsdelivr.net/npm/@arcade-v/arcade_v/navigation/style.css?ts=' + Date.now(), { cache: 'no-store' })
+                .then(function () { if (el) el.textContent = Math.round(performance.now() - t0) + ' ms'; })
+                .catch(function () { if (el) el.textContent = 'fail'; });
+        }
+        function mechStartOwnerTools() {
+            var last = performance.now(), frames = 0, acc = 0;
+            function loop() {
+                if (!document.getElementById('ownerFps')) return;
+                frames++;
+                var now = performance.now(); acc += now - last; last = now;
+                if (acc >= 500) {
+                    document.getElementById('ownerFps').textContent = Math.round(frames / (acc / 1000));
+                    var memEl = document.getElementById('ownerMem');
+                    if (memEl && performance.memory) memEl.textContent = (performance.memory.usedJSHeapSize / 1048576).toFixed(1) + ' / ' + (performance.memory.jsHeapSizeLimit / 1048576).toFixed(0) + ' MB';
+                    var nEl = document.getElementById('ownerNodes'); if (nEl) nEl.textContent = document.getElementsByTagName('*').length;
+                    frames = 0; acc = 0;
+                }
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+        }
+        function mechAppsScriptHelp() {
+            var code = [
+                'function doPost(e) {',
+                '  var ss = SpreadsheetApp.getActiveSpreadsheet();',
+                '  var sh = ss.getSheetByName("visits") || ss.insertSheet("visits");',
+                '  var d = JSON.parse(e.postData.contents);',
+                '  var email = "";',
+                '  try { email = Session.getActiveUser().getEmail(); } catch (err) {}',
+                '  sh.appendRow([new Date(), d.t, d.ref, d.path, d.screen, d.tz, d.lang, d.ua, email]);',
+                '  return ContentService.createTextOutput("ok");',
+                '}',
+                'function doGet() {',
+                '  var ss = SpreadsheetApp.getActiveSpreadsheet();',
+                '  var sh = ss.getSheetByName("visits");',
+                '  var v = sh ? sh.getDataRange().getValues() : [];',
+                '  return ContentService.createTextOutput(JSON.stringify(v)).setMimeType(ContentService.MimeType.JSON);',
+                '}'
+            ].join('\n');
+            return '<p style="color:var(--muted);margin:6px 0 12px">Global tracking is off (this shows only this device). To log every visitor: make a new Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; paste this &rarr; Deploy &rarr; Web app (access: <b>Anyone</b>). Then paste the <b>/exec</b> URL into <code>OWNER_LOG_ENDPOINT</code>.</p>'
+                + '<div class="codebox" id="ownerScriptCode">' + code + '</div>'
+                + '<div class="tool-row"><button class="tool-btn" onclick="mechCopy(\'ownerScriptCode\', this);"><i class="fas fa-copy"></i> Copy Script</button></div>';
+        }
+        function mechCopy(id, btn) {
+            var el = document.getElementById(id); if (!el) return;
+            var txt = el.textContent || '';
+            function done() { if (btn) { var old = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Copied'; setTimeout(function () { btn.innerHTML = old; }, 1400); } }
+            if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done).catch(done); }
+            else { var t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(t); done(); }
+        }
+        function mechLoadGlobal() {
+            var el = document.getElementById('ownerGlobal'); if (!el) return;
+            if (!OWNER_LOG_ENDPOINT) { el.innerHTML = mechAppsScriptHelp(); return; }
+            el.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
+            fetch(OWNER_LOG_ENDPOINT, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (rows) {
+                if (!Array.isArray(rows) || rows.length < 1) { el.innerHTML = '<p style="color:var(--muted)">No global visits recorded yet.</p>'; return; }
+                var body = rows.slice().reverse().slice(0, 200).map(function (r) {
+                    return '<tr><td>' + (r[1] ? mechAge(new Date(r[1]).toISOString()) : '-') + '</td><td>' + (r[2] || 'direct') + '</td><td>' + (r[3] || '-') + '</td><td>' + (r[4] || '-') + '</td><td>' + (r[5] || '-') + '</td></tr>';
+                }).join('');
+                el.innerHTML = '<div class="log-scroll"><table class="log-table"><thead><tr><th>When</th><th>Referrer</th><th>Path</th><th>Screen</th><th>Timezone</th></tr></thead><tbody>' + body + '</tbody></table></div>';
+            }).catch(function () { el.innerHTML = '<p style="color:var(--muted)">Could not reach the log endpoint (CORS or offline). The endpoint still receives visits.</p>'; });
+        }
+        function mechSetTitle() { var t = prompt('New site title:', document.title || 'MECHANIC'); if (t !== null && t.trim()) changeTitle(t.trim()); }
+        function mechSetFav() { var u = prompt('Favicon image URL (blank = default):', ''); if (u !== null) changeFavicon(u.trim()); }
+        function mechClearData() { if (confirm('Clear ALL MECHANIC data on this device (settings, theme, visit log)? This cannot be undone.')) { try { localStorage.clear(); } catch (e) {} location.reload(); } }
+
+        // ===================== OWNER CONSOLE UI =====================
+        var OWNER_TAB = 'overview';
+        var MECH_FX_LIST = [
+            ['scanlines', 'Scanlines', 'fa-tv'],
+            ['vignette', 'Vignette', 'fa-circle-half-stroke'],
+            ['matrix', 'Matrix Rain', 'fa-code'],
+            ['crt', 'CRT Flicker', 'fa-desktop'],
+            ['grain', 'Film Grain', 'fa-film'],
+            ['chroma', 'Chromatic', 'fa-clone'],
+            ['glitch', 'Glitch', 'fa-bolt-lightning'],
+            ['bloom', 'Bloom Glow', 'fa-sun'],
+            ['hue', 'Hue Cycle', 'fa-palette'],
+            ['invert', 'Night Vision', 'fa-moon'],
+            ['ghost', 'Ghost Mode', 'fa-ghost'],
+            ['turbo', 'Turbo (no anim)', 'fa-gauge-simple-high'],
+            ['party', 'Party Mode', 'fa-champagne-glasses']
+        ];
+
+        function ownerTabs() {
+            return [['overview', 'Overview', 'fa-gauge-high'], ['tools', 'Tools', 'fa-toolbox'], ['diagnostics', 'Diagnostics', 'fa-stethoscope'], ['extras', 'Extras', 'fa-wand-magic-sparkles'], ['data', 'Data', 'fa-database']].map(function (t) {
+                return '<button class="own-tab' + (OWNER_TAB === t[0] ? ' active' : '') + '" onclick="ownerGo(\'' + t[0] + '\')"><i class="fas ' + t[2] + '"></i> ' + t[1] + '</button>';
+            }).join('');
+        }
+        function ownerGo(id) { OWNER_TAB = id; ownerRefresh(); }
+        function ownerRefresh() { var bar = document.getElementById('ownerTabs'); if (bar) bar.innerHTML = ownerTabs(); var body = document.getElementById('ownerBody'); if (!body) return; body.innerHTML = ownerView(); ownerAfterRender(); window.scrollTo(0, 0); }
+        function ownerView() { if (OWNER_TAB === 'tools') return ownerViewTools(); if (OWNER_TAB === 'diagnostics') return ownerViewDiagnostics(); if (OWNER_TAB === 'extras') return ownerViewExtras(); if (OWNER_TAB === 'data') return ownerViewData(); return ownerViewOverview(); }
+        function ownerAfterRender() { if (OWNER_TAB === 'overview') { mechStartOwnerTools(); mechLoadGlobal(); mechBattery(); } if (OWNER_TAB === 'diagnostics') { mechQuota(); mechPermissions(); } }
+        function ownerSwitch(key, label, icon, on) { return '<div class="switch' + (on ? ' on' : '') + '" onclick="mechToggleFx(\'' + key + '\')"><span class="dot"></span><i class="fas ' + icon + '"></i> ' + label + '</div>'; }
+        function mechBtnFlash(btn, txt) { if (!btn) return; var o = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> ' + (txt || 'Copied'); setTimeout(function () { btn.innerHTML = o; }, 1300); }
+
+        function ownerViewOverview() {
+            var d = mechReadData();
+            var det = mechDetect();
+            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+            var net = conn.effectiveType ? (conn.effectiveType + (conn.downlink ? ' / ' + conn.downlink + ' Mbps' : '')) : '-';
+            var timing = mechTiming();
+            var plays = d.plays || {};
+            var topPlays = Object.keys(plays).map(function (k) { return [k, plays[k]]; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 8);
+            var stats = [
+                ['All-time Visits', (d.visits || 0), 'fa-eye'],
+                ['Sessions', (d.sessions || 0), 'fa-rotate'],
+                ['Last Session', (d.lastDur ? d.lastDur + 's' : '-'), 'fa-stopwatch'],
+                ['First Seen', (d.firstSeen ? mechAge(d.firstSeen) : 'now'), 'fa-seedling'],
+                ['Last Seen', (d.lastSeen ? mechAge(d.lastSeen) : 'now'), 'fa-clock'],
+                ['Titles Played', Object.keys(plays).length, 'fa-gamepad']
+            ].map(function (s) { return statTile(s[0], s[1], s[2]); }).join('');
+            var deviceKv = ownerKV([
+                ['OS', det.os], ['Browser', det.br], ['Screen', screen.width + 'x' + screen.height],
+                ['Viewport', window.innerWidth + 'x' + window.innerHeight], ['Pixel Ratio', (window.devicePixelRatio || 1) + 'x'],
+                ['Timezone', (Intl.DateTimeFormat().resolvedOptions().timeZone || '-')], ['Language', navigator.language || '-'],
+                ['Network', net], ['Battery', '<span id="ownerBatt">reading...</span>'], ['GPU', '<span id="ownerGpu">not detected</span>'],
+                ['Platform', (navigator.platform || '-')]
+            ]);
+            var perfKv = ownerKV([['TTFB', timing.ttfb], ['DOMContentLoaded', timing.dom], ['Load', timing.load], ['Transfer', timing.transfer]]);
+            var logRows = (d.log || []).map(function (r) {
+                return '<tr><td>' + mechAge(r.t) + '</td><td>' + (r.ref || 'direct') + '</td><td>' + (r.path || '-') + '</td><td>' + (r.res || '-') + '</td></tr>';
+            }).join('') || '<tr><td colspan="4" style="color:var(--muted)">No visits logged on this device yet.</td></tr>';
+            var playRows = topPlays.map(function (p) { return '<tr><td>' + p[0] + '</td><td>' + p[1] + '</td></tr>'; }).join('') || '<tr><td colspan="2" style="color:var(--muted)">No games played yet.</td></tr>';
+            return ''
+                + '<div class="stat-grid">' + stats + '</div>'
+                + '<div class="section-card"><h2><i class="fas fa-microchip"></i> This Device</h2>' + deviceKv + '</div>'
+                + '<div class="section-card"><h2><i class="fas fa-gauge-high"></i> Live Performance</h2>'
+                + '<div class="stat-grid">'
+                + statTile('FPS', '<span id="ownerFps">-</span>', 'fa-bolt')
+                + statTile('JS Heap', '<span id="ownerMem">n/a</span>', 'fa-memory')
+                + statTile('DOM Nodes', '<span id="ownerNodes">-</span>', 'fa-sitemap')
+                + statTile('Ping', '<span id="ownerPing">-</span>', 'fa-wave-square')
+                + '</div>' + perfKv
+                + '<div class="tool-row">'
+                + '<button class="tool-btn" onclick="mechPing();"><i class="fas fa-satellite-dish"></i> Run Speed Test</button>'
+                + '<button class="tool-btn" onclick="mechGpu();"><i class="fas fa-tv"></i> Detect GPU</button>'
+                + '<button class="tool-btn" onclick="mechBattery();"><i class="fas fa-battery-half"></i> Read Battery</button>'
+                + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-trophy"></i> Top Played (this device)</h2><table class="kv"><tbody>' + playRows + '</tbody></table></div>'
+                + '<div class="section-card"><h2><i class="fas fa-list"></i> Visit Log (this device)</h2><div class="log-scroll"><table class="log-table"><thead><tr><th>When</th><th>Referrer</th><th>Path</th><th>Screen</th></tr></thead><tbody>' + logRows + '</tbody></table></div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-globe"></i> Global Visitors</h2><div id="ownerGlobal"></div></div>';
+        }
+
+        function ownerViewTools() {
+            var themeBtns = (typeof BG_THEMES !== 'undefined' ? BG_THEMES : []).map(function (t) {
+                return '<button class="tool-btn" onclick="applyTheme(\'' + t.key + '\')">' + t.name + '</button>';
+            }).join('');
+            return ''
+                + '<div class="section-card"><h2><i class="fas fa-rocket"></i> Quick Launch</h2><div class="tool-row">'
+                + '<button class="tool-btn" onclick="showHome();"><i class="fas fa-home"></i> Home</button>'
+                + '<button class="tool-btn" onclick="showGallery(\'games\');"><i class="fas fa-gamepad"></i> Games</button>'
+                + '<button class="tool-btn" onclick="showGallery(\'apps\');"><i class="fas fa-mobile-alt"></i> Apps</button>'
+                + '<button class="tool-btn" onclick="launchMovie();"><i class="fas fa-film"></i> Movies</button>'
+                + '<button class="tool-btn" onclick="loadSettings();"><i class="fas fa-cog"></i> Settings</button>'
+                + '<button class="tool-btn" onclick="triggerFullscreen();"><i class="fas fa-expand"></i> Fullscreen</button>'
+                + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-pen-ruler"></i> Site &amp; Appearance</h2><div class="tool-row">'
+                + '<button class="tool-btn" onclick="mechSetTitle();"><i class="fas fa-heading"></i> Change Title</button>'
+                + '<button class="tool-btn" onclick="mechSetFav();"><i class="fas fa-star"></i> Change Favicon</button>'
+                + '<button class="tool-btn" onclick="window.print();"><i class="fas fa-print"></i> Print / Save PDF</button>'
+                + '<button class="tool-btn" onclick="mechCopyLink(this);"><i class="fas fa-link"></i> Copy Link</button>'
+                + '</div><div class="tool-row">' + themeBtns + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-dice"></i> Generators &amp; Utilities</h2>'
+                + '<div class="tool-row" style="align-items:center">'
+                + '<label style="color:var(--faint);font-family:var(--font-mono);font-size:.72rem">Length <input id="pwLen" type="number" value="16" min="4" max="64" style="width:64px;margin-left:6px;padding:7px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong)"></label>'
+                + '<button class="tool-btn" onclick="mechGenPass();"><i class="fas fa-key"></i> Password</button>'
+                + '<button class="tool-btn" onclick="mechUUID();"><i class="fas fa-fingerprint"></i> UUID</button>'
+                + '<input id="randMin" type="number" value="1" style="width:64px;padding:8px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong)">'
+                + '<input id="randMax" type="number" value="100" style="width:64px;padding:8px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong)">'
+                + '<button class="tool-btn" onclick="mechRand();"><i class="fas fa-hashtag"></i> Random</button>'
+                + '</div>'
+                + '<div class="codebox" id="pwOut" style="margin-top:10px">-</div>'
+                + '<div class="codebox" id="uuidOut" style="margin-top:8px">-</div>'
+                + '<div class="codebox" id="randOut" style="margin-top:8px">1 - 100</div>'
+                + '<h2 style="margin-top:22px"><i class="fas fa-code"></i> Base64</h2>'
+                + '<div class="tool-row" style="align-items:center"><select id="b64Mode" style="padding:9px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong);font-family:var(--font-mono)"><option value="encode">Encode</option><option value="decode">Decode</option></select>'
+                + '<button class="tool-btn" onclick="mechB64();"><i class="fas fa-play"></i> Run</button></div>'
+                + '<textarea id="b64In" placeholder="text..." style="width:100%;min-height:64px;margin-top:8px;padding:10px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong);font-family:var(--font-mono);resize:vertical"></textarea>'
+                + '<div class="codebox" id="b64Out" style="margin-top:8px">-</div>'
+                + '<h2 style="margin-top:22px"><i class="fas fa-fingerprint"></i> SHA-256 Hash</h2>'
+                + '<textarea id="hashIn" placeholder="text to hash..." style="width:100%;min-height:64px;padding:10px;background:var(--panel2);color:#fff;border:1px solid var(--line-strong);font-family:var(--font-mono);resize:vertical"></textarea>'
+                + '<div class="tool-row" style="align-items:center"><button class="tool-btn" onclick="mechHash();"><i class="fas fa-hash"></i> Hash</button>'
+                + '<input id="colorIn" type="color" value="#ffffff" onchange="mechColor()" title="Color picker" style="width:46px;height:38px;background:none;border:1px solid var(--line-strong);cursor:pointer">'
+                + '<span id="colorOut" class="codebox" style="padding:9px 14px;margin:0">#ffffff</span></div>'
+                + '<div class="codebox" id="hashOut" style="margin-top:8px">-</div>'
+                + '</div>';
+        }
+
+        function ownerViewDiagnostics() {
+            var conn = navigator.connection || {};
+            return ''
+                + '<div class="section-card"><h2><i class="fas fa-heart-pulse"></i> System</h2>'
+                + ownerKV([
+                    ['Online', mechBool(navigator.onLine)],
+                    ['Cookies Enabled', mechBool(navigator.cookieEnabled)],
+                    ['Do Not Track', (navigator.doNotTrack || 'unset')],
+                    ['Storage Used', '<span id="ownerQuota">checking...</span>'],
+                    ['Language(s)', (navigator.languages ? navigator.languages.join(', ') : (navigator.language || '-'))],
+                    ['CPU Cores', (navigator.hardwareConcurrency || 'n/a')],
+                    ['Device Memory', (navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'n/a')],
+                    ['Connection', (conn.effectiveType || 'n/a') + (conn.rtt ? ' / ' + conn.rtt + ' ms' : '')]
+                ])
+                + '<h2 style="margin-top:22px"><i class="fas fa-paintbrush"></i> Paint Timings</h2>' + mechPaint()
+                + '<h2 style="margin-top:22px"><i class="fas fa-diagram-project"></i> Resources</h2>' + mechResources()
+                + '</div>'
+                + '<div class="section-card"><h2><i class="fas fa-circle-check"></i> Feature Support</h2>' + mechFeatures() + '</div>'
+                + '<div class="section-card"><h2><i class="fas fa-key"></i> Permissions</h2><div id="ownerPerms"><p style="color:var(--muted)">Checking...</p></div>'
+                + '<div class="tool-row"><button class="tool-btn" onclick="mechPermissions();"><i class="fas fa-rotate"></i> Refresh</button></div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-bug"></i> Error Log (this session)</h2><div id="ownerErrors">' + ownerErrors() + '</div>'
+                + '<div class="tool-row"><button class="tool-btn" onclick="mechClearErrors();"><i class="fas fa-eraser"></i> Clear Errors</button></div></div>';
+        }
+
+        function ownerViewExtras() {
+            var s = mechFxState();
+            var toggles = MECH_FX_LIST.map(function (f) { return ownerSwitch(f[0], f[1], f[2], !!s[f[0]]); }).join('');
+            var active = MECH_FX_LIST.filter(function (f) { return !!s[f[0]]; }).length;
+            var presets = [
+                ['Off', 'fa-power-off', 'off'],
+                ['CRT', 'fa-tv', 'crt'],
+                ['Cyber', 'fa-code', 'cyber'],
+                ['Horror', 'fa-ghost', 'horror'],
+                ['Rave', 'fa-champagne-glasses', 'rave'],
+                ['Everything', 'fa-layer-group', 'all']
+            ].map(function (p) {
+                return '<button class="tool-btn" onclick="mechPreset(\'' + p[2] + '\')"><i class="fas ' + p[1] + '"></i> ' + p[0] + '</button>';
+            }).join('');
+            return ''
+                + '<div class="section-card"><h2><i class="fas fa-wand-magic-sparkles"></i> Visual Effects <span class="fx-count">' + active + ' active</span></h2>'
+                + '<p class="fx-note">Hidden toggles — they persist and apply across the whole site.</p>'
+                + '<div class="fx-grid">' + toggles + '</div>'
+                + '<div class="tool-row"><button class="tool-btn" onclick="mechPreset(\'all\'); mechConfetti();"><i class="fas fa-fire"></i> Effect Storm</button>'
+                + '<button class="tool-btn danger" onclick="mechResetFx();"><i class="fas fa-broom"></i> Turn All Off</button></div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-sliders"></i> Presets</h2>'
+                + '<p class="fx-note">One-tap looks — mix and match them afterward.</p>'
+                + '<div class="tool-row">' + presets + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-burst"></i> Play</h2><div class="tool-row">'
+                + '<button class="tool-btn" onclick="mechConfetti();"><i class="fas fa-gift"></i> Confetti</button>'
+                + '<button class="tool-btn" onclick="mechMatrixBurst();"><i class="fas fa-code"></i> Matrix Burst</button>'
+                + '<button class="tool-btn" onclick="mechPartyBurst();"><i class="fas fa-champagne-glasses"></i> Random Theme</button>'
+                + '</div></div>';
+        }
+        function mechPreset(name) {
+            var map = {
+                off: {},
+                crt: { scanlines: true, vignette: true, crt: true },
+                cyber: { matrix: true, chroma: true, bloom: true, hue: true },
+                horror: { ghost: true, vignette: true, glitch: true, grain: true },
+                rave: { party: true, hue: true, bloom: true, chroma: true },
+                all: {}
+            };
+            if (name === 'all') { MECH_FX_LIST.forEach(function (f) { map.all[f[0]] = true; }); }
+            if (name === 'off') { mechResetFx(); return; }
+            mechSaveFx(map[name] || {});
+            mechApplyFx();
+            if (name === 'rave') mechConfetti();
+            if (document.getElementById('ownerBody')) ownerRefresh();
+        }
+        function mechMatrixBurst() {
+            var s = mechFxState();
+            if (!s.matrix) { s.matrix = true; mechSaveFx(s); mechApplyFx(); }
+            mechConfetti();
+            if (document.getElementById('ownerBody')) ownerRefresh();
+        }
+
+        function ownerViewData() {
+            var storeRows = mechStorageList().map(function (s) {
+                return '<tr><td>' + s[0] + '</td><td>' + s[1] + '</td><td style="text-align:right"><button class="tool-btn" onclick="mechDeleteKey(\'' + s[0].replace(/'/g, "\\'") + '\');"><i class="fas fa-xmark"></i></button></td></tr>';
+            }).join('') || '<tr><td colspan="3" style="color:var(--muted)">Empty</td></tr>';
+            return ''
+                + '<div class="section-card"><h2><i class="fas fa-file-export"></i> Backup</h2><div class="tool-row">'
+                + '<button class="tool-btn" onclick="mechExportData();"><i class="fas fa-download"></i> Export JSON</button>'
+                + '<button class="tool-btn" onclick="mechCopyAll(this);"><i class="fas fa-copy"></i> Copy All</button>'
+                + '<button class="tool-btn" onclick="document.getElementById(\'importFile\').click();"><i class="fas fa-upload"></i> Import JSON</button>'
+                + '<input id="importFile" type="file" accept="application/json,.json" style="display:none" onchange="mechImportData(this)">'
+                + '<button class="tool-btn danger" onclick="mechClearData();"><i class="fas fa-trash"></i> Clear All Data</button>'
+                + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-database"></i> Storage Inspector</h2><table class="kv"><tbody>' + storeRows + '</tbody></table></div>';
+        }
+
+        // ===== FX engine =====
+        var _mechFx = null;
+        function mechFxState() { if (_mechFx) return _mechFx; try { _mechFx = JSON.parse(localStorage.getItem('mech_fx') || '{}') || {}; } catch (e) { _mechFx = {}; } return _mechFx; }
+        function mechSaveFx(o) { _mechFx = o; try { localStorage.setItem('mech_fx', JSON.stringify(o)); } catch (e) {} }
+        function mechToggleFx(key) { var s = mechFxState(); s[key] = !s[key]; mechSaveFx(s); mechApplyFx(); if (document.getElementById('ownerBody')) ownerRefresh(); }
+        function mechResetFx() { mechSaveFx({}); mechApplyFx(); if (document.getElementById('ownerBody')) ownerRefresh(); }
+        function mechPartyBurst() { var list = (typeof BG_THEMES !== 'undefined' ? BG_THEMES : []); if (list.length) applyTheme(list[Math.floor(Math.random() * list.length)].key); }
+        function mechApplyFx() {
+            var s = mechFxState();
+            document.body.classList.toggle('fx-scanlines', !!s.scanlines);
+            document.body.classList.toggle('fx-vignette', !!s.vignette);
+            document.body.classList.toggle('fx-crt', !!s.crt);
+            document.body.classList.toggle('fx-grain', !!s.grain);
+            document.body.classList.toggle('fx-chroma', !!s.chroma);
+            document.body.classList.toggle('fx-glitch', !!s.glitch);
+            document.body.classList.toggle('fx-bloom', !!s.bloom);
+            document.body.classList.toggle('fx-hue', !!s.hue);
+            document.body.classList.toggle('fx-invert', !!s.invert);
+            document.body.classList.toggle('fx-ghost', !!s.ghost);
+            document.body.classList.toggle('fx-turbo', !!s.turbo);
+            mechMatrix(!!s.matrix);
+            if (s.party) { if (!window._mechParty) window._mechParty = setInterval(mechPartyBurst, 2600); }
+            else if (window._mechParty) { clearInterval(window._mechParty); window._mechParty = null; }
+        }
+        function mechMatrix(on) {
+            var cv = document.getElementById('mechMatrix');
+            if (!on) { if (cv) cv.remove(); if (window._mechMatrixRAF) { cancelAnimationFrame(window._mechMatrixRAF); window._mechMatrixRAF = null; } return; }
+            if (cv) return;
+            cv = document.createElement('canvas'); cv.id = 'mechMatrix'; document.body.appendChild(cv);
+            var ctx = cv.getContext('2d'), font = 16, cols, drops, chars = '01MECHANICPLAYアイウエオカキクケコ';
+            function size() { cv.width = window.innerWidth; cv.height = window.innerHeight; cols = Math.floor(cv.width / font); drops = []; for (var i = 0; i < cols; i++) drops[i] = Math.random() * cv.height / font; }
+            size(); window.addEventListener('resize', size);
+            function step() {
+                if (!document.getElementById('mechMatrix')) return;
+                ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(0, 0, cv.width, cv.height);
+                ctx.fillStyle = '#8dffc0'; ctx.font = font + 'px monospace';
+                for (var i = 0; i < drops.length; i++) { ctx.fillText(chars.charAt(Math.floor(Math.random() * chars.length)), i * font, drops[i] * font); if (drops[i] * font > cv.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; }
+                window._mechMatrixRAF = requestAnimationFrame(step);
+            }
+            step();
+        }
+        function mechConfetti() {
+            for (var i = 0; i < 90; i++) {
+                var el = document.createElement('div'); el.className = 'mech-confetti';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.background = ['#fff', '#b8b8c6', '#6a6a7c', '#15151c'][i % 4];
+                el.style.animationDelay = (Math.random() * 0.5) + 's';
+                el.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+                document.body.appendChild(el);
+                (function (e) { setTimeout(function () { e.remove(); }, 3600); })(el);
+            }
+        }
+        (function mechEnsureFxEls() {
+            ['mechScanlines', 'mechVignette', 'mechCrt', 'mechGrain'].forEach(function (id) { if (!document.getElementById(id)) { var el = document.createElement('div'); el.id = id; document.body.appendChild(el); } });
+        })();
+        mechApplyFx();
+
+        // ===== Diagnostics helpers =====
+        function mechBool(v) { return v === true ? '<span class="ok">yes</span>' : (v === false || v === undefined || v === null ? '<span class="no">no</span>' : v); }
+        function mechQuota() { var el = document.getElementById('ownerQuota'); if (!el) return; if (navigator.storage && navigator.storage.estimate) { navigator.storage.estimate().then(function (e) { el.textContent = (e.usage / 1048576).toFixed(1) + ' MB / ' + (e.quota / 1048576).toFixed(0) + ' MB (' + (e.usage / e.quota * 100).toFixed(1) + '%)'; }).catch(function () { el.textContent = 'n/a'; }); } else el.textContent = 'n/a'; }
+        function mechPaint() { try { var p = performance.getEntriesByType('paint') || []; if (!p.length) return ownerKV([['paint', 'n/a']]); return ownerKV(p.map(function (x) { return [x.name, Math.round(x.startTime) + ' ms']; })); } catch (e) { return ownerKV([['paint', 'n/a']]); } }
+        function mechResources() { try { var r = performance.getEntriesByType('resource') || []; var by = {}, total = 0; r.forEach(function (x) { var k = x.initiatorType || 'other'; by[k] = (by[k] || 0) + 1; total += (x.transferSize || 0); }); var rows = Object.keys(by).map(function (k) { return [k, by[k]]; }); rows.push(['total', r.length + ' files / ' + (total / 1024).toFixed(0) + ' KB']); return ownerKV(rows); } catch (e) { return ownerKV([['resources', 'n/a']]); } }
+        function mechFeatures() {
+            function gl(t) { try { return !!document.createElement('canvas').getContext(t); } catch (e) { return false; } }
+            function ls() { try { localStorage.setItem('_t', '1'); localStorage.removeItem('_t'); return true; } catch (e) { return false; } }
+            var f = [
+                ['WebGL', gl('webgl')], ['WebGL2', gl('webgl2')], ['Canvas 2D', gl('2d')],
+                ['WebAssembly', typeof WebAssembly !== 'undefined'], ['Service Worker', 'serviceWorker' in navigator],
+                ['Local Storage', ls()], ['IndexedDB', !!window.indexedDB], ['Fetch API', typeof fetch === 'function'],
+                ['WebRTC', !!(window.RTCPeerConnection || window.webkitRTCPeerConnection)], ['Notifications', 'Notification' in window],
+                ['Geolocation', 'geolocation' in navigator], ['Clipboard', !!navigator.clipboard], ['Bluetooth', 'bluetooth' in navigator],
+                ['USB', 'usb' in navigator], ['Gamepad', 'getGamepads' in navigator], ['Vibration', 'vibrate' in navigator],
+                ['Share', 'share' in navigator], ['Fullscreen', !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)],
+                ['Speech Synth', 'speechSynthesis' in window], ['Battery API', 'getBattery' in navigator], ['WebGPU', 'gpu' in navigator],
+                ['Picture-in-Picture', !!document.pictureInPictureEnabled]
+            ];
+            return ownerKV(f.map(function (x) { return [x[0], mechBool(x[1])]; }));
+        }
+        function mechPermissions() {
+            var el = document.getElementById('ownerPerms'); if (!el) return;
+            if (!navigator.permissions || !navigator.permissions.query) { el.innerHTML = '<p style="color:var(--muted)">Permissions API unavailable.</p>'; return; }
+            var names = ['geolocation', 'notifications', 'camera', 'microphone', 'clipboard-read'];
+            var map = {}, left = names.length;
+            function fin() { if (--left === 0) el.innerHTML = ownerKV(names.map(function (n) { return [n, map[n] || 'n/a']; })); }
+            names.forEach(function (n) {
+                var q = null; try { q = navigator.permissions.query({ name: n }); } catch (e) { q = null; }
+                if (q && q.then) { q.then(function (s) { map[n] = s.state; }).catch(function () { map[n] = 'n/a'; }).then(fin); }
+                else { map[n] = 'n/a'; fin(); }
+            });
+        }
+        function mechClearErrors() { window._mechErrs = []; var el = document.getElementById('ownerErrors'); if (el) el.innerHTML = ownerErrors(); }
+        function ownerErrors() { var e = window._mechErrs || []; if (!e.length) return '<p style="color:var(--muted)">No errors captured this session.</p>'; return '<div class="log-scroll"><table class="log-table"><thead><tr><th>When</th><th>Error</th></tr></thead><tbody>' + e.slice().reverse().map(function (x) { return '<tr><td>' + mechAge(x.t) + '</td><td>' + x.msg + '</td></tr>'; }).join('') + '</tbody></table></div>'; }
+
+        // ===== Generators / utilities =====
+        function mechGenPass() { var el = document.getElementById('pwOut'); var inp = document.getElementById('pwLen'); var len = Math.max(4, Math.min(64, parseInt((inp && inp.value) || '16', 10) || 16)); var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*-_=+'; var out = ''; var c = window.crypto; if (c && c.getRandomValues) { var a = new Uint32Array(len); c.getRandomValues(a); for (var i = 0; i < len; i++) out += chars[a[i] % chars.length]; } else { for (var j = 0; j < len; j++) out += chars.charAt(Math.floor(Math.random() * chars.length)); } if (el) el.textContent = out; }
+        function mechUUID() { var el = document.getElementById('uuidOut'); if (!el) return; var u = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); }); el.textContent = u; }
+        function mechRand() { var el = document.getElementById('randOut'); if (!el) return; var min = parseInt((document.getElementById('randMin') || {}).value || '1', 10), max = parseInt((document.getElementById('randMax') || {}).value || '100', 10); if (min > max) { var t = min; min = max; max = t; } el.textContent = String(Math.floor(Math.random() * (max - min + 1)) + min); }
+        function mechB64() { var inp = (document.getElementById('b64In') || {}).value || ''; var mode = (document.getElementById('b64Mode') || {}).value || 'encode'; var el = document.getElementById('b64Out'); if (!el) return; try { el.textContent = mode === 'encode' ? btoa(unescape(encodeURIComponent(inp))) : decodeURIComponent(escape(atob(inp))); } catch (e) { el.textContent = 'error: ' + e.message; } }
+        function mechHash() { var inp = (document.getElementById('hashIn') || {}).value || ''; var el = document.getElementById('hashOut'); if (!el) return; if (window.crypto && crypto.subtle) { crypto.subtle.digest('SHA-256', new TextEncoder().encode(inp)).then(function (buf) { el.textContent = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('00' + b.toString(16)).slice(-2); }).join(''); }).catch(function () { el.textContent = 'n/a'; }); } else el.textContent = 'n/a'; }
+        function mechColor() { var el = document.getElementById('colorOut'); var inp = document.getElementById('colorIn'); if (!el || !inp) return; el.textContent = inp.value; if (navigator.clipboard) { try { navigator.clipboard.writeText(inp.value); } catch (e) {} } }
+        function mechCopyLink(btn) { if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { mechBtnFlash(btn); }).catch(function () {}); }
+
+        // ===== Data backup =====
+        function mechExportData() { var out = {}; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); out[k] = localStorage.getItem(k); } var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mechanic-data.json'; document.body.appendChild(a); a.click(); a.remove(); }
+        function mechCopyAll(btn) { var out = {}; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); out[k] = localStorage.getItem(k); } if (navigator.clipboard) navigator.clipboard.writeText(JSON.stringify(out, null, 2)).then(function () { mechBtnFlash(btn); }).catch(function () {}); }
+        function mechImportData(input) { var f = input.files && input.files[0]; if (!f) return; var r = new FileReader(); r.onload = function () { try { var o = JSON.parse(r.result); var n = 0; Object.keys(o).forEach(function (k) { localStorage.setItem(k, o[k]); n++; }); alert('Imported ' + n + ' keys.'); ownerRefresh(); } catch (e) { alert('Invalid file.'); } }; r.readAsText(f); }
+        function mechDeleteKey(k) { try { localStorage.removeItem(k); } catch (e) {} ownerRefresh(); }
+
+        function openOwner() {
+            document.body.classList.remove('movie-mode');
+            var container = document.getElementById('content-container');
+            var frame = document.getElementById('Game');
+            if (frame) { frame.style.display = 'none'; frame.src = 'about:blank'; }
+            var bar = document.getElementById('gameBar'); if (bar) bar.style.display = 'none';
+            if (container) container.style.display = 'block';
+            container.innerHTML = ''
+                + '<div class="owner-wrap">'
+                + '<div class="owner-banner"><div class="lock"><i class="fas fa-user-shield"></i></div>'
+                + '<div><h1>Owner Console</h1><p>RESTRICTED // type P R E S T O N to toggle</p></div>'
+                + '<div class="grow"></div>'
+                + '<button class="btn btn-ghost" onclick="showHome();"><i class="fas fa-xmark"></i> Exit</button></div>'
+                + '<div class="own-tabs" id="ownerTabs">' + ownerTabs() + '</div>'
+                + '<div id="ownerBody"></div>'
+                + '</div>';
+            restartAnimation(container);
+            setActive(null);
+            ownerRefresh();
+        }
+
+        // secret trigger: type the letters P R E S T O N in order
+        (function () {
+            var seq = 'preston', idx = 0;
+            document.addEventListener('keydown', function (e) {
+                var t = e.target || {};
+                var tag = (t.tagName || '').toUpperCase();
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t.isContentEditable) { idx = 0; return; }
+                if (e.ctrlKey || e.metaKey || e.altKey) return;
+                var k = (e.key || '').toLowerCase();
+                if (k.length !== 1) return;
+                if (k === seq.charAt(idx)) { idx++; if (idx === seq.length) { idx = 0; try { localStorage.setItem('mech_owner', '1'); } catch (_) {} openOwner(); } }
+                else { idx = (k === seq.charAt(0)) ? 1 : 0; }
+            });
+        })();
 
         // Start on the built-in homepage
         showHome();
