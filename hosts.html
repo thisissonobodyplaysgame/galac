@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Host Reachability Test</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, monospace; background:#0a0a0d; color:#eee; padding:20px; }
+  h1 { font-size: 20px; } p { opacity:.75; max-width: 800px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 14px; }
+  td, th { border: 1px solid #2a2a2e; padding: 8px 10px; font-size: 13px; text-align: left; }
+  th { background:#141418; }
+  .ok { color:#4ade80; font-weight:700; } .bad { color:#f87171; font-weight:700; } .pend { color:#fbbf24; }
+  #sum { margin-top:14px; font-weight:700; }
+</style></head>
+<body>
+<h1>Host Reachability Test</h1>
+<p>This checks which hosts your network allows for game assets. Wait ~10 seconds, then read the results (or screenshot them).</p>
+<table id="t"><thead><tr><th>Host</th><th>Result</th><th>Detail</th></tr></thead><tbody></tbody></table>
+<div id="sum">Testing…</div>
+<script>
+const tests = [
+  {name:'cdn.jsdelivr.net (current)', url:'https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js', expect:'Ruffle'},
+  {name:'fastly.jsdelivr.net', url:'https://fastly.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js', expect:'Ruffle'},
+  {name:'gcore.jsdelivr.net', url:'https://gcore.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js', expect:'Ruffle'},
+  {name:'testingcf.jsdelivr.net', url:'https://testingcf.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js', expect:'Ruffle'},
+  {name:'unpkg.com', url:'https://unpkg.com/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js', expect:'Ruffle'},
+  {name:'cdn.statically.io', url:'https://cdn.statically.io/gh/gn-math/html/main/1.html', expect:'<'},
+  {name:'raw.githack.com', url:'https://raw.githack.com/gn-math/html/main/1.html', expect:'<'},
+  {name:'rawcdn.githack.com', url:'https://rawcdn.githack.com/gn-math/html/main/1.html', expect:'<'},
+  {name:'raw.githubusercontent.com', url:'https://raw.githubusercontent.com/gn-math/html/main/1.html', expect:'<'},
+  {name:'github.io mirror (ugs/GN-Files)', url:'https://thisissonobodyplaysgame.github.io/ugs/GN-Files/1.html', expect:''},
+  {name:'b-cdn relay (movies host)', url:'https://learningaboutnoahandjacobatwork.b-cdn.net/api?url=thisissonobodyplaysgame.github.io', expect:''}
+];
+const tb = document.querySelector('#t tbody');
+for (const t of tests){ const tr = document.createElement('tr'); tr.innerHTML = '<td>'+t.name+'</td><td class="pend">testing…</td><td></td>'; tb.appendChild(tr); t.tr = tr; }
+(async () => {
+  let okCount = 0;
+  for (const t of tests){
+    const res = t.tr.children[1], det = t.tr.children[2];
+    try {
+      const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 12000);
+      const r = await fetch(t.url, { mode:'cors', cache:'no-store', signal: ctrl.signal });
+      clearTimeout(to);
+      const body = await r.text();
+      const ok = r.ok && body.length > 50 && (!t.expect || body.indexOf(t.expect) !== -1);
+      res.className = ok ? 'ok' : 'bad';
+      res.textContent = ok ? 'OK' : 'BLOCKED/odd';
+      if (ok) okCount++;
+      det.textContent = 'HTTP ' + r.status + ', ' + body.length + ' bytes';
+    } catch(e){ res.className = 'bad'; res.textContent = 'BLOCKED'; det.textContent = e.name; }
+  }
+  document.getElementById('sum').textContent = 'Done — ' + okCount + '/' + tests.length + ' reachable.';
+})();
+</script>
+</body></html>
