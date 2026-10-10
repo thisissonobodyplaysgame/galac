@@ -754,6 +754,9 @@
             <a aria-label="Movies" data-nav="movies" onclick="launchMovie();">
                 <i class="fas fa-film"></i><span>Movies</span>
             </a>
+            <a aria-label="Anime" data-nav="anime" onclick="launchAnime();">
+                <i class="fas fa-tv"></i><span>Anime</span>
+            </a>
             <a aria-label="Proxy" data-nav="proxy" href="https://learningaboutnoahandjacobatwork.b-cdn.net/slate" target="_blank" rel="noopener">
                 <i class="fas fa-ghost"></i><span>Proxy</span>
             </a>
@@ -3948,7 +3951,6 @@
                         direct: true
                     }, {
                         title: 'TikTok',
-                        image: 'https://static.cdnlogo.com/logos/t/46/tiktok-icon-black.svg',
                         url: 'https://learningaboutnoahandjacobatwork.b-cdn.net/api?url=https://tiktok.com/foryou',
                         category: ['Tools'],
                         direct: true,
@@ -3962,8 +3964,8 @@
                         newTab: true
                     }, {
                         title: 'Skate 3',
-                        image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9d53218e-d014-4011-8c42-bd21f6aa61e1/df1mlz4-f8623e2e-c7a6-4a93-9282-2bb5148aa0b1.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi85ZDUzMjE4ZS1kMDE0LTQwMTEtOGM0Mi1iZDIxZjZhYTYxZTEvZGYxbWx6NC1mODYyM2UyZS1jN2E2LTRhOTMtOTI4Mi0yYmI1MTQ4YWEwYjEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.f7B0ibHSoJtTpuUQ-Wd7Mlc7q4z-XDyPNDt1VPooDgs',
-                        url: 'https://learningabouttubasatwork.b-cdn.net/',
+                        image: 'https://static.wikia.nocookie.net/skate/images/7/7d/Skate_3.jpg/revision/latest?cb=20220715005550',
+                        url: 'https://learningaboutcountriesinskate.b-cdn.net/',
                         category: ['Tools'],
                         newTab: true
                     });
@@ -4426,9 +4428,18 @@
             setIframe(url);
         }
 
-        // Back button after playing: return to the gallery or home (for the movie feed).
+        // Open the anime feed in the in-site player iframe
+        function launchAnime() {
+            galleryType = 'anime';
+            document.body.classList.add('movie-mode');
+            const url = 'https://learningaboutnoahandjacobatwork.b-cdn.net/api?url=https://thisissonobodyplaysgame.github.io/crunch/';
+            prewarmGame(url);
+            setIframe(url);
+        }
+
+        // Back button after playing: return to the gallery or home (for the movie/anime feeds).
         function backAfterPlay() {
-            if (galleryType === 'home') showHome();
+            if (galleryType === 'home' || galleryType === 'anime') showHome();
             else showGallery(galleryType);
         }
 
@@ -4606,6 +4617,7 @@
                 + prefNavSwitch('games', 'fa-gamepad', 'Games')
                 + prefNavSwitch('apps', 'fa-mobile-alt', 'Apps')
                 + prefNavSwitch('movies', 'fa-film', 'Movies')
+                + prefNavSwitch('anime', 'fa-tv', 'Anime')
                 + prefNavSwitch('proxy', 'fa-ghost', 'Proxy')
                 + prefNavSwitch('ai', 'fa-brain', 'A.I.')
                 + '</div></div>'
@@ -4904,6 +4916,7 @@
                 + '<button class="tool-btn" onclick="showGallery(\'games\');"><i class="fas fa-gamepad"></i> Games</button>'
                 + '<button class="tool-btn" onclick="showGallery(\'apps\');"><i class="fas fa-mobile-alt"></i> Apps</button>'
                 + '<button class="tool-btn" onclick="launchMovie();"><i class="fas fa-film"></i> Movies</button>'
+                + '<button class="tool-btn" onclick="launchAnime();"><i class="fas fa-tv"></i> Anime</button>'
                 + '<button class="tool-btn" onclick="loadSettings();"><i class="fas fa-cog"></i> Settings</button>'
                 + '<button class="tool-btn" onclick="triggerFullscreen();"><i class="fas fa-expand"></i> Fullscreen</button>'
                 + '</div></div>'
