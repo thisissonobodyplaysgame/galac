@@ -653,6 +653,24 @@
         body.fx-bloom .section-card, body.fx-bloom .game-card, body.fx-bloom .stat-tile, body.fx-bloom .tool-btn { box-shadow: 0 0 24px rgba(255, 255, 255, 0.09); }
         body.fx-hue #webBkg, body.fx-hue #content-container { animation: hueCycle 12s linear infinite; }
         @keyframes hueCycle { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+        #mechSnow { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 851; pointer-events: none; opacity: 0.9; }
+        #mechSpot { position: fixed; inset: 0; z-index: 852; pointer-events: none; display: none; background: radial-gradient(circle 260px at var(--mx, 50vw) var(--my, 40vh), rgba(255,255,255,0.16), rgba(255,255,255,0.04) 45%, transparent 70%); }
+        body.fx-spot #mechSpot { display: block; }
+        #mechAlert { position: fixed; inset: 0; z-index: 902; pointer-events: none; display: none; background: radial-gradient(ellipse at center, rgba(255, 0, 0, 0.05), rgba(255, 0, 0, 0.38)); box-shadow: inset 0 0 170px rgba(255, 0, 0, 0.5); animation: alertPulse 1.1s ease-in-out infinite; }
+        body.fx-alert #mechAlert { display: block; }
+        @keyframes alertPulse { 0%, 100% { opacity: 0.28; } 50% { opacity: 0.92; } }
+        body.fx-neon #content-container { filter: saturate(1.15) contrast(1.05); }
+        body.fx-neon .section-card, body.fx-neon .game-card, body.fx-neon .stat-tile, body.fx-neon .tool-btn, body.fx-neon .switch { box-shadow: 0 0 10px rgba(0, 255, 255, 0.55), 0 0 26px rgba(255, 0, 200, 0.35), inset 0 0 12px rgba(0, 255, 255, 0.12) !important; border-color: rgba(0, 255, 255, 0.7) !important; }
+        body.fx-neon h1, body.fx-neon h2, body.fx-neon .brand-name, body.fx-neon .stat-value { text-shadow: 0 0 6px #0ff, 0 0 16px #0ff, 0 0 26px #f0f; }
+        body.fx-sepia #webBkg, body.fx-sepia header, body.fx-sepia .drawer, body.fx-sepia #content-container, body.fx-sepia #Game, body.fx-sepia #gameBar { filter: sepia(0.75) contrast(1.08) brightness(0.96) saturate(1.1); }
+        body.fx-shake #content-container { animation: mechShake 0.5s infinite; }
+        @keyframes mechShake { 0% { transform: translate(-1.5px,1px); } 20% { transform: translate(-2px,1px); } 40% { transform: translate(2px,-1px); } 60% { transform: translate(-1px,2px); } 80% { transform: translate(1px,-2px); } 100% { transform: translate(-1.5px,1px); } }
+        body.fx-float #content-container { animation: floatBob 6s ease-in-out infinite; }
+        @keyframes floatBob { 0% { transform: translateY(-6px); } 50% { transform: translateY(-16px); } 100% { transform: translateY(-6px); } }
+        body.fx-wave #content-container { animation: waveSkew 5s ease-in-out infinite; }
+        @keyframes waveSkew { 0% { transform: skewX(0.6deg); } 50% { transform: skewX(-0.6deg); } 100% { transform: skewX(0.6deg); } }
+        body.fx-zoom #content-container { animation: zoomPulse 8s ease-in-out infinite; }
+        @keyframes zoomPulse { 0% { transform: scale(1.015); } 50% { transform: scale(1.035); } 100% { transform: scale(1.015); } }
         body.fx-chroma #content-container { text-shadow: 2px 0 rgba(255, 0, 90, 0.5), -2px 0 rgba(0, 190, 255, 0.5); }
         body.fx-chroma h1, body.fx-chroma h2, body.fx-chroma .brand-name, body.fx-chroma .gallery-head h1 { text-shadow: 3px 0 rgba(255, 0, 90, 0.6), -3px 0 rgba(0, 190, 255, 0.6); }
         body.fx-glitch #content-container { animation: glitchShift 5s steps(1) infinite; }
@@ -670,6 +688,22 @@
         .fx-count { display: inline-block; margin-left: 8px; padding: 2px 10px; border: 1px solid var(--line-strong); border-radius: 999px; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; color: #fff; vertical-align: middle; }
         .fx-note { color: var(--muted); margin-bottom: 16px; }
 
+        /* ===== Public prefs (settings page) ===== */
+        body.perf-lite #webBkg { display: none !important; }
+        body.perf-lite::before, body.perf-lite header::before, body.perf-lite .brand-icon::after,
+        body.perf-lite .hero h1, body.perf-lite .ticker-track, body.perf-lite .game-card:hover::before { animation: none !important; }
+        body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after { animation: none !important; transition: none !important; }
+        body.density-compact .game-grid { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+        body.density-compact .game-card { font-size: 0.9em; }
+        body.density-large .game-grid { grid-template-columns: repeat(auto-fill, minmax(224px, 1fr)); gap: 20px; }
+        .pref-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .seg { display: inline-flex; border: 1px solid var(--line-strong); overflow: hidden; }
+        .seg button { padding: 9px 16px; border: 0; border-right: 1px solid var(--line-strong); background: var(--panel2); color: var(--muted); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.18s ease, color 0.18s ease; }
+        body .secg-btn:last-child { border-right: none; }
+        .fx-grid label.set-input, .mech-field { display: flex; align-items: center; gap: 8px; color: var(--faint); font-family: var(--font-mono); font-size: 0.72rem; }
+        .mech-field input { flex: 1; padding: 9px 12px; background: var(--panel2); color: #fff; border: 1px solid var(--line-strong); font-family: var(--font-mono); font-size: 0.75rem; }
+        .tool-btn.sel { background: #fff; color: #0a0a0d; border-color: #fff; box-shadow: 3px 3px 0 var(--hard); }
+
         /* ===== Confetti ===== */
         .mech-confetti { position: fixed; top: -14px; width: 9px; height: 14px; z-index: 1000; pointer-events: none; animation-name: confFall; animation-timing-function: linear; animation-fill-mode: forwards; }
         @keyframes confFall {
@@ -678,7 +712,7 @@
         }
 
         @media (max-width: 720px) { .own-tab { flex: 1 1 auto; justify-content: center; } }
-        @media (prefers-reduced-motion: reduce) { .mech-confetti, #mechMatrix, #mechGrain, #mechCrt { display: none !important; } }
+        @media (prefers-reduced-motion: reduce) { .mech-confetti, #mechMatrix, #mechGrain, #mechCrt, #mechSnow, #mechSpot, #mechAlert { display: none !important; } body.fx-shake #content-container, body.fx-float #content-container, body.fx-wave #content-container, body.fx-zoom #content-container, body.fx-hue #content-container { animation: none !important; } }
     </style>
 </head>
 <body style="margin: 0;">
@@ -708,22 +742,22 @@
             </div>
         </div>
         <nav>
-            <a aria-label="Home" data-page="home" class="active" onclick="showHome();">
+            <a aria-label="Home" data-page="home" data-nav="home" class="active" onclick="showHome();">
                 <i class="fas fa-home"></i><span>Home</span>
             </a>
-            <a aria-label="Games" data-page="games" onclick="showGallery('games');">
+            <a aria-label="Games" data-page="games" data-nav="games" onclick="showGallery('games');">
                 <i class="fas fa-gamepad"></i><span>Games</span>
             </a>
-            <a aria-label="Apps" data-page="apps" onclick="showGallery('apps');">
+            <a aria-label="Apps" data-page="apps" data-nav="apps" onclick="showGallery('apps');">
                 <i class="fas fa-mobile-alt"></i><span>Apps</span>
             </a>
-            <a aria-label="Movies" onclick="launchMovie();">
+            <a aria-label="Movies" data-nav="movies" onclick="launchMovie();">
                 <i class="fas fa-film"></i><span>Movies</span>
             </a>
-            <a aria-label="Proxy" href="https://learningaboutnoahandjacobatwork.b-cdn.net/slate" target="_blank" rel="noopener">
+            <a aria-label="Proxy" data-nav="proxy" href="https://learningaboutnoahandjacobatwork.b-cdn.net/slate" target="_blank" rel="noopener">
                 <i class="fas fa-ghost"></i><span>Proxy</span>
             </a>
-            <a aria-label="A.I." href="https://gemini.google.com/app" target="_blank" rel="noopener">
+            <a aria-label="A.I." data-nav="ai" href="https://gemini.google.com/app" target="_blank" rel="noopener">
                 <i class="fas fa-brain"></i><span>A.I.</span>
             </a>
             <a aria-label="Settings" data-page="settings" onclick="loadSettings();">
@@ -832,6 +866,7 @@
                 seed();
             }
             function step() {
+                if (window._mechBgOn === false) return;
                 ctx.clearRect(0, 0, W, H);
                 var i, j, a, dx, dy, d, t;
                 for (i = 0; i < nodes.length; i++) {
@@ -891,6 +926,8 @@
             window.addEventListener('pointerleave', function() { mouse.active = false; });
             document.addEventListener('mouseleave', function() { mouse.active = false; });
             resize();
+            window._mechBgOn = true;
+            window._mechBgResume = function() { if (window._mechBgOn !== false) requestAnimationFrame(step); };
             requestAnimationFrame(step);
         })();
 
@@ -3899,11 +3936,16 @@
                 if (type === 'apps' && Array.isArray(galleryData)) {
                     galleryData.unshift({
                         title: 'Geoforce',
-                        image: 'https://www.logo.wine/a/logo/Nvidia/Nvidia-Light-Vertical-Dark-Background-Logo.wine.svg',
                         url: 'https://learningaboutnoahandjacobatwork.b-cdn.net/api?url=https://tinyurl.com/ys54n4xe/&type=prism&autoSW=false',
                         category: ['Tools'],
                         direct: true,
                         newTab: true
+                    }, {
+                        title: 'BlooketBot',
+                        image: 'https://gitlab.com/arcade_v/arcade_v_images/-/raw/main/favicon/blooket.ico',
+                        url: 'https://learningaboutbookss.b-cdn.net/',
+                        category: ['Tools'],
+                        direct: true
                     }, {
                         title: 'TikTok',
                         image: 'https://static.cdnlogo.com/logos/t/46/tiktok-icon-black.svg',
@@ -3920,8 +3962,8 @@
                         newTab: true
                     }, {
                         title: 'Skate 3',
-                        image: 'https://static.wikia.nocookie.net/skate/images/7/7d/Skate_3.jpg/revision/latest?cb=20220715005550',
-                        url: 'https://learningaboutcountriesinskate.b-cdn.net/',
+                        image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9d53218e-d014-4011-8c42-bd21f6aa61e1/df1mlz4-f8623e2e-c7a6-4a93-9282-2bb5148aa0b1.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi85ZDUzMjE4ZS1kMDE0LTQwMTEtOGM0Mi1iZDIxZjZhYTYxZTEvZGYxbWx6NC1mODYyM2UyZS1jN2E2LTRhOTMtOTI4Mi0yYmI1MTQ4YWEwYjEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.f7B0ibHSoJtTpuUQ-Wd7Mlc7q4z-XDyPNDt1VPooDgs',
+                        url: 'https://learningabouttubasatwork.b-cdn.net/',
                         category: ['Tools'],
                         newTab: true
                     });
@@ -4026,6 +4068,7 @@
 
             let html = '<div class="page-size">Show ' +
                 '<select onchange="setPageSize(this.value)">' +
+                '<option value="6"' + (PER_PAGE === 6 ? ' selected' : '') + '>6</option>' +
                 '<option value="12"' + (PER_PAGE === 12 ? ' selected' : '') + '>12</option>' +
                 '<option value="24"' + (PER_PAGE === 24 ? ' selected' : '') + '>24</option>' +
                 '<option value="48"' + (PER_PAGE === 48 ? ' selected' : '') + '>48</option>' +
@@ -4200,6 +4243,10 @@
                 window.open(url, '_blank', 'noopener');
                 return;
             }
+            if (mechPrefs().newtab) {
+                window.open(url, '_blank', 'noopener');
+                return;
+            }
             if (btn.getAttribute('data-direct')) {
                 setIframe(url);
             } else {
@@ -4315,7 +4362,6 @@
                 const bgSection = document.createElement('div');
                 bgSection.className = 'section-card';
                 let bgHtml = '<h2><i class="fas fa-palette" style="color:#22d3ee;"></i> Background</h2>' +
-                    '<p>Pick a backdrop for your galaxy.</p>' +
                     '<div class="bg-options" id="bgPicker">';
                 const current = localStorage.getItem('bgTheme') || 'deep';
                 BG_THEMES.forEach(function(t) {
@@ -4327,6 +4373,12 @@
                 bgHtml += '</div>';
                 bgSection.innerHTML = bgHtml;
                 doc.insertBefore(bgSection, doc.firstChild);
+
+                // Our own personalization panel (works for everyone)
+                const mechWrap = document.createElement('div');
+                mechWrap.id = 'mechPrefsWrap';
+                mechWrap.innerHTML = mechSettingsHTML();
+                doc.insertBefore(mechWrap, bgSection.nextSibling);
 
                 const container = document.getElementById('content-container');
                 container.style.display = 'block';
@@ -4478,7 +4530,121 @@
         // Apply any saved background theme on load
         applyTheme(localStorage.getItem('bgTheme') || 'deep');
 
-        // ===================== OWNER CONSOLE (secret: type P R E S T O N) =====================
+        // ===================== PUBLIC PREFERENCES (settings page) =====================
+        var MECH_DECOY_ICON = "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='10'%20fill='white'/%3E%3Ctext%20x='32'%20y='47'%20font-family='Arial,Helvetica,sans-serif'%20font-size='46'%20font-weight='bold'%20text-anchor='middle'%20fill='%234285F4'%3EG%3C/text%3E%3C/svg%3E";
+
+        function mechPrefs() {
+            var d = { perf: false, motion: false, newtab: false, density: 'comfy', hidden: [], panic: false, panicKey: '`', panicUrl: 'https://www.google.com/' };
+            try {
+                var o = JSON.parse(localStorage.getItem('mech_prefs') || '{}') || {};
+                Object.keys(o).forEach(function (k) { d[k] = o[k]; });
+            } catch (e) {}
+            if (!Array.isArray(d.hidden)) d.hidden = [];
+            return d;
+        }
+        function mechSavePrefs(o) { try { localStorage.setItem('mech_prefs', JSON.stringify(o)); } catch (e) {} }
+        function mechSetPref(k, v) { var p = mechPrefs(); p[k] = v; mechSavePrefs(p); mechApplyPrefs(); mechRefreshSettings(); }
+        function mechTogglePref(k) { var p = mechPrefs(); p[k] = !p[k]; mechSavePrefs(p); mechApplyPrefs(); mechRefreshSettings(); }
+        function mechToggleHidden(key) { var p = mechPrefs(); var i = p.hidden.indexOf(key); if (i >= 0) p.hidden.splice(i, 1); else p.hidden.push(key); mechSavePrefs(p); mechApplyPrefs(); mechRefreshSettings(); }
+
+        function mechApplyNav(p) {
+            var hid = (p && p.hidden) || [];
+            var links = document.querySelectorAll('nav a[data-nav]');
+            for (var i = 0; i < links.length; i++) {
+                var key = links[i].getAttribute('data-nav');
+                links[i].style.display = hid.indexOf(key) >= 0 ? 'none' : '';
+            }
+        }
+        var MECH_PAGE_SIZE = { compact: 48, comfy: 12, large: 6 };
+        function mechPerPage(p) { return MECH_PAGE_SIZE[(p || mechPrefs()).density] || 12; }
+        function mechApplyPrefs() {
+            var p = mechPrefs();
+            var b = document.body;
+            b.classList.toggle('perf-lite', !!p.perf);
+            b.classList.toggle('reduce-motion', !!p.motion);
+            document.body.classList.toggle('density-compact', p.density === 'compact');
+            document.body.classList.toggle('density-large', p.density === 'large');
+            var wasOn = window._mechBgOn;
+            window._mechBgOn = !p.perf;
+            if (!p.perf && wasOn === false && typeof window._mechBgResume === 'function') window._mechBgResume();
+            mechApplyNav(p);
+            var pp = mechPerPage(p);
+            if (typeof PER_PAGE !== 'undefined' && pp !== PER_PAGE) {
+                PER_PAGE = pp;
+                if (typeof currentPage !== 'undefined') currentPage = 1;
+                if (document.getElementById('gameGrid') && typeof galleryData !== 'undefined' && galleryData && galleryData.length) renderGallery();
+            }
+        }
+        function mechSetDensity(k) { var p = mechPrefs(); p.density = k; mechSavePrefs(p); mechApplyPrefs(); mechRefreshSettings(); }
+        function prefSwitch(key, icon, label) {
+            var on = !!mechPrefs()[key];
+            return '<div class="switch' + (on ? ' on' : '') + '" onclick="mechTogglePref(\'' + key + '\')"><span class="dot"></span><i class="fas ' + icon + '"></i> ' + label + '</div>';
+        }
+        function prefNavSwitch(key, icon, label) {
+            var on = mechPrefs().hidden.indexOf(key) < 0;
+            return '<div class="switch' + (on ? ' on' : '') + '" onclick="mechToggleHidden(\'' + key + '\')"><span class="dot"></span><i class="fas ' + icon + '"></i> ' + label + '</div>';
+        }
+        function mechAttr(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function mechSettingsHTML() {
+            var p = mechPrefs();
+            var dens = [['compact', 'Small · more'], ['comfy', 'Medium'], ['large', 'Large · fewer']].map(function (d) {
+                return '<button class="tool-btn' + (p.density === d[0] ? ' sel' : '') + '" onclick="mechSetDensity(\'' + d[0] + '\')">' + d[1] + '</button>';
+            }).join('');
+            return ''
+                + '<div class="section-card"><h2><i class="fas fa-sliders"></i> Personalization</h2>'
+                + '<p>Make MECHANIC yours — saved to this device.</p>'
+                + '<div class="fx-grid">'
+                + prefSwitch('perf', 'fa-gauge-simple-high', 'Performance Mode')
+                + prefSwitch('motion', 'fa-wind', 'Reduce Motion')
+                + prefSwitch('newtab', 'fa-up-right-from-square', 'Open Games in New Tab')
+                + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-table-cells-large"></i> App Icon Size</h2>'
+                + '<p>Smaller icons fit more games &amp; apps on screen; larger icons show fewer.</p>'
+                + '<div class="tool-row">' + dens + '</div>'
+                + '<h2 style="margin-top:22px"><i class="fas fa-bars"></i> Sidebar Items</h2>'
+                + '<p>Choose what shows in the left menu.</p><div class="fx-grid">'
+                + prefNavSwitch('games', 'fa-gamepad', 'Games')
+                + prefNavSwitch('apps', 'fa-mobile-alt', 'Apps')
+                + prefNavSwitch('movies', 'fa-film', 'Movies')
+                + prefNavSwitch('proxy', 'fa-ghost', 'Proxy')
+                + prefNavSwitch('ai', 'fa-brain', 'A.I.')
+                + '</div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-user-secret"></i> Panic / Boss Key</h2>'
+                + '<p>Tap your key to instantly disguise the tab and jump to a safe page.</p>'
+                + '<div class="fx-grid">' + prefSwitch('panic', 'fa-shield-halved', 'Enable Panic Key') + '</div>'
+                + '<div class="mech-field" style="margin-top:14px"><span>Key</span>'
+                + '<input value="' + mechAttr(p.panicKey) + '" placeholder="`" onchange="mechSetPref(\'panicKey\', this.value)"></div>'
+                + '<div class="mech-field" style="margin-top:10px"><span>Safe URL</span>'
+                + '<input value="' + mechAttr(p.panicUrl) + '" placeholder="https://www.google.com/" onchange="mechSetPref(\'panicUrl\', this.value)"></div></div>'
+                + '<div class="section-card"><h2><i class="fas fa-database"></i> Backup</h2>'
+                + '<p>Save, restore or reset your settings.</p><div class="tool-row">'
+                + '<button class="tool-btn" onclick="mechExportData();"><i class="fas fa-download"></i> Export</button>'
+                + '<button class="tool-btn" onclick="document.getElementById(\'mechImportFile\').click();"><i class="fas fa-upload"></i> Import</button>'
+                + '<input id="mechImportFile" type="file" accept="application/json,.json" style="display:none" onchange="mechImportData(this)">'
+                + '<button class="tool-btn danger" onclick="mechResetPrefs();"><i class="fas fa-trash"></i> Reset Prefs</button>'
+                + '</div></div>';
+        }
+        function mechRefreshSettings() { var w = document.getElementById('mechPrefsWrap'); if (w) w.innerHTML = mechSettingsHTML(); }
+        function mechResetPrefs() { if (confirm('Reset all personalization settings? This cannot be undone.')) { try { localStorage.removeItem('mech_prefs'); } catch (e) {} location.reload(); } }
+
+        // Panic key listener
+        (function () {
+            document.addEventListener('keydown', function (e) {
+                var p = mechPrefs();
+                if (!p.panic) return;
+                var want = String(p.panicKey || '`');
+                var k = e.key || '';
+                var hit = (k && k.toLowerCase() === want.toLowerCase()) || (want === 'Escape' && k === 'Escape');
+                if (!hit) return;
+                e.preventDefault();
+                try { changeTitle('Google'); changeFavicon(MECH_DECOY_ICON); } catch (_) {}
+                try { location.replace(p.panicUrl || 'https://www.google.com/'); } catch (_) {}
+            }, true);
+        })();
+
+        mechApplyPrefs();
+
+        // ===================== OWNER CONSOLE (secret: type M B G) =====================
         // Paste a Google Apps Script /exec URL below to log + show visitors from ALL devices.
         const OWNER_LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyNARC5GfOJ7COhYXRfWRU_G_OSla0JV-KYTDB1BNNhVz6kyA7thZJPw2rdbvaSZQJvtQ/exec';
 
@@ -4647,14 +4813,23 @@
             ['scanlines', 'Scanlines', 'fa-tv'],
             ['vignette', 'Vignette', 'fa-circle-half-stroke'],
             ['matrix', 'Matrix Rain', 'fa-code'],
+            ['snow', 'Snowfall', 'fa-snowflake'],
             ['crt', 'CRT Flicker', 'fa-desktop'],
             ['grain', 'Film Grain', 'fa-film'],
             ['chroma', 'Chromatic', 'fa-clone'],
             ['glitch', 'Glitch', 'fa-bolt-lightning'],
             ['bloom', 'Bloom Glow', 'fa-sun'],
+            ['neon', 'Neon Glow', 'fa-lightbulb'],
             ['hue', 'Hue Cycle', 'fa-palette'],
+            ['sepia', 'Sepia Film', 'fa-clapperboard'],
             ['invert', 'Night Vision', 'fa-moon'],
             ['ghost', 'Ghost Mode', 'fa-ghost'],
+            ['shake', 'Screen Shake', 'fa-up-down-left-right'],
+            ['float', 'Float', 'fa-feather'],
+            ['wave', 'Wave', 'fa-water'],
+            ['zoom', 'Zoom Pulse', 'fa-magnifying-glass-plus'],
+            ['spot', 'Spotlight', 'fa-crosshairs'],
+            ['alert', 'Red Alert', 'fa-triangle-exclamation'],
             ['turbo', 'Turbo (no anim)', 'fa-gauge-simple-high'],
             ['party', 'Party Mode', 'fa-champagne-glasses']
         ];
@@ -4796,7 +4971,10 @@
                 ['Off', 'fa-power-off', 'off'],
                 ['CRT', 'fa-tv', 'crt'],
                 ['Cyber', 'fa-code', 'cyber'],
+                ['Neon', 'fa-lightbulb', 'neonx'],
                 ['Horror', 'fa-ghost', 'horror'],
+                ['Winter', 'fa-snowflake', 'winter'],
+                ['Quake', 'fa-up-down-left-right', 'quake'],
                 ['Rave', 'fa-champagne-glasses', 'rave'],
                 ['Everything', 'fa-layer-group', 'all']
             ].map(function (p) {
@@ -4822,8 +5000,11 @@
                 off: {},
                 crt: { scanlines: true, vignette: true, crt: true },
                 cyber: { matrix: true, chroma: true, bloom: true, hue: true },
+                neonx: { neon: true, shake: true, bloom: true, alert: true },
                 horror: { ghost: true, vignette: true, glitch: true, grain: true },
-                rave: { party: true, hue: true, bloom: true, chroma: true },
+                winter: { snow: true, float: true, bloom: true, spot: true },
+                quake: { shake: true, wave: true, zoom: true, alert: true },
+                rave: { party: true, hue: true, bloom: true, chroma: true, zoom: true },
                 all: {}
             };
             if (name === 'all') { MECH_FX_LIST.forEach(function (f) { map.all[f[0]] = true; }); }
@@ -4874,8 +5055,17 @@
             document.body.classList.toggle('fx-hue', !!s.hue);
             document.body.classList.toggle('fx-invert', !!s.invert);
             document.body.classList.toggle('fx-ghost', !!s.ghost);
+            document.body.classList.toggle('fx-neon', !!s.neon);
+            document.body.classList.toggle('fx-sepia', !!s.sepia);
+            document.body.classList.toggle('fx-shake', !!s.shake);
+            document.body.classList.toggle('fx-float', !!s.float);
+            document.body.classList.toggle('fx-wave', !!s.wave);
+            document.body.classList.toggle('fx-zoom', !!s.zoom);
+            document.body.classList.toggle('fx-spot', !!s.spot);
+            document.body.classList.toggle('fx-alert', !!s.alert);
             document.body.classList.toggle('fx-turbo', !!s.turbo);
             mechMatrix(!!s.matrix);
+            mechSnow(!!s.snow);
             if (s.party) { if (!window._mechParty) window._mechParty = setInterval(mechPartyBurst, 2600); }
             else if (window._mechParty) { clearInterval(window._mechParty); window._mechParty = null; }
         }
@@ -4896,6 +5086,33 @@
             }
             step();
         }
+        function mechSnow(on) {
+            var cv = document.getElementById('mechSnow');
+            if (!on) { if (cv) cv.remove(); if (window._mechSnowRAF) { cancelAnimationFrame(window._mechSnowRAF); window._mechSnowRAF = null; } return; }
+            if (cv) return;
+            cv = document.createElement('canvas'); cv.id = 'mechSnow'; document.body.appendChild(cv);
+            var ctx = cv.getContext('2d'), flakes = [];
+            function size() {
+                cv.width = window.innerWidth; cv.height = window.innerHeight;
+                flakes = [];
+                var n = Math.round(cv.width * cv.height / 9000);
+                for (var i = 0; i < n; i++) flakes.push({ x: Math.random() * cv.width, y: Math.random() * cv.height, r: Math.random() * 2.8 + 1.2, s: Math.random() * 1.3 + 0.5, d: Math.random() * 0.7 - 0.35 });
+            }
+            size(); window.addEventListener('resize', size);
+            function step() {
+                if (!document.getElementById('mechSnow')) return;
+                ctx.clearRect(0, 0, cv.width, cv.height);
+                ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                for (var i = 0; i < flakes.length; i++) {
+                    var f = flakes[i];
+                    ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.2832); ctx.fill();
+                    f.y += f.s; f.x += f.d;
+                    if (f.y > cv.height + 4) { f.y = -4; f.x = Math.random() * cv.width; }
+                }
+                window._mechSnowRAF = requestAnimationFrame(step);
+            }
+            step();
+        }
         function mechConfetti() {
             for (var i = 0; i < 90; i++) {
                 var el = document.createElement('div'); el.className = 'mech-confetti';
@@ -4908,7 +5125,11 @@
             }
         }
         (function mechEnsureFxEls() {
-            ['mechScanlines', 'mechVignette', 'mechCrt', 'mechGrain'].forEach(function (id) { if (!document.getElementById(id)) { var el = document.createElement('div'); el.id = id; document.body.appendChild(el); } });
+            ['mechScanlines', 'mechVignette', 'mechCrt', 'mechGrain', 'mechAlert', 'mechSpot'].forEach(function (id) { if (!document.getElementById(id)) { var el = document.createElement('div'); el.id = id; document.body.appendChild(el); } });
+            document.addEventListener('pointermove', function (e) {
+                var sp = document.getElementById('mechSpot');
+                if (sp) { sp.style.setProperty('--mx', e.clientX + 'px'); sp.style.setProperty('--my', e.clientY + 'px'); }
+            });
         })();
         mechApplyFx();
 
@@ -4973,7 +5194,7 @@
             container.innerHTML = ''
                 + '<div class="owner-wrap">'
                 + '<div class="owner-banner"><div class="lock"><i class="fas fa-user-shield"></i></div>'
-                + '<div><h1>Owner Console</h1><p>RESTRICTED // type P R E S T O N to toggle</p></div>'
+                + '<div><h1>Owner Console</h1><p>RESTRICTED // type M B G to toggle</p></div>'
                 + '<div class="grow"></div>'
                 + '<button class="btn btn-ghost" onclick="showHome();"><i class="fas fa-xmark"></i> Exit</button></div>'
                 + '<div class="own-tabs" id="ownerTabs">' + ownerTabs() + '</div>'
@@ -4984,9 +5205,9 @@
             ownerRefresh();
         }
 
-        // secret trigger: type the letters P R E S T O N in order
+        // secret trigger: type the letters M B G in order
         (function () {
-            var seq = 'preston', idx = 0;
+            var seq = 'mbg', idx = 0;
             document.addEventListener('keydown', function (e) {
                 var t = e.target || {};
                 var tag = (t.tagName || '').toUpperCase();
