@@ -4422,22 +4422,18 @@
             window.scrollTo(0, 0);
         }
 
-        // Open the movie feed in the in-site player iframe
+        // Open the movie feed in a new tab (same as Apps)
         function launchMovie() {
-            galleryType = 'home';
-            document.body.classList.add('movie-mode');
             const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=https://thisissonobodyplaysgame.github.io/fluxsun';
             prewarmGame(url);
-            setIframe(url);
+            window.open(url, '_blank', 'noopener');
         }
 
-        // Open the anime feed in the in-site player iframe
+        // Open the anime feed in a new tab (same as Apps)
         function launchAnime() {
-            galleryType = 'anime';
-            document.body.classList.add('movie-mode');
             const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=https://thisissonobodyplaysgame.github.io/crunch/';
             prewarmGame(url);
-            setIframe(url);
+            window.open(url, '_blank', 'noopener');
         }
 
         // Back button after playing: return to the gallery or home (for the movie/anime feeds).
