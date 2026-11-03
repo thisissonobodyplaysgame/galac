@@ -4422,16 +4422,20 @@
             window.scrollTo(0, 0);
         }
 
-        // Open the movie feed in a new tab (same as Apps)
+        // Open the movie feed in a new tab (same as Apps). The ?v= stamp gives each
+        // launch a fresh url, so a school filter that caches whole urls can't hand
+        // back an old copy of the site whose player isn't proxied yet.
         function launchMovie() {
-            const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=https://thisissonobodyplaysgame.github.io/fluxsun';
+            const target = 'https://thisissonobodyplaysgame.github.io/fluxsun/?v=' + Date.now();
+            const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=' + encodeURIComponent(target);
             prewarmGame(url);
             window.open(url, '_blank', 'noopener');
         }
 
         // Open the anime feed in a new tab (same as Apps)
         function launchAnime() {
-            const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=https://thisissonobodyplaysgame.github.io/crunch/';
+            const target = 'https://thisissonobodyplaysgame.github.io/crunch/?v=' + Date.now();
+            const url = 'https://thisissonobodyplaysgame.github.io/leskid/?url=' + encodeURIComponent(target);
             prewarmGame(url);
             window.open(url, '_blank', 'noopener');
         }
